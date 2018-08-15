@@ -1,0 +1,244 @@
+*{
+	/*box-sizing: border-box;*/
+	font-family: "微软雅黑";
+}
+html,body{
+	height: 100%;
+}
+.g-doc{
+	height:auto; 
+    min-height:100%; 
+    _height:100%; 
+}
+.g-hd{
+	height: 112px;
+	position: relative;
+	background: #2f4d6a;
+}
+.g-hd .banner{
+	padding-top: 40px;
+}
+.g-hd .logo{
+	padding-right: 10px;
+	border-right: 1px solid #3c5873;
+}
+.g-hd .tips{
+	padding-left: 5px;
+	border-left: 1px solid #2d4967;
+}
+.g-hd .tips h1{
+	line-height: 33px;
+	font-size: 24px;
+	font-weight: normal;
+	color: #74879b;
+}
+.g-hd .tips p{
+	font-size: 22px;
+	color: #74879b;
+}
+.g-hd .tips span{
+	font-size: 12px;
+	color: #74879b;
+}
+.g-bd{
+	position: relative;
+    padding-bottom: 137px; /*底部高度*/
+}
+.g-sd{
+	width: 220px;
+    float: left;
+	margin-right: -220px;
+	z-index: 1;
+	position: relative;
+	/* top: -73px; */
+	padding-bottom: 200px;
+	background: #4a6179;
+}
+
+.g-mn{
+    width: 1180px;
+    padding-left: 20px;
+    float: left;
+    position: relative;
+    z-index: 0;
+}
+.g-mnc {
+    margin-left: 220px;
+}
+.g-ft{
+	position: relative;
+	height: 137px;
+	background: #2f4d6a;
+	margin-top: -137px; /*底部高度*/
+	font-size: 14px;
+	color: #b6c4d3;
+	line-height: 30px;
+}
+.g-ft a {
+	color: #b6c4d3;
+}
+.g-ft a:hover{
+	opacity: 0.7;
+}
+.g-ft-wrap{
+	padding-top: 40px;
+}
+.g-ft .copyrighten,
+.g-ft .copyrightzh{
+	line-height: 20px;
+}
+
+/*模块*/
+.m-wrap{
+	width: 1200px;
+	margin: 0 auto;
+}
+.m-toolbar{
+	height: 100px;
+	background-color: #e2e8f2;
+}
+.m-tab1{
+	position: relative;
+}
+.m-tab1 ul{
+	position: relative;
+	width: 100%;
+	height: 70px;
+	border-bottom: 2px solid #ebf0f4;
+}	
+.m-tab1 ul li{
+	width: 158px;
+	height: 70px;
+	float: left;
+	line-height: 70px;
+	font-size: 20px;
+	text-align: center;
+	z-index: 2;
+}
+.m-tab1 ul li a{
+	display: block;
+	font-weight: bold;
+	color: #4a6077;
+}
+.m-tab1 ul li:hover{
+	opacity: 0.7;
+}
+.m-tab1 ul li.active{
+	border-bottom: 2px solid #3ca4db;
+}
+/*输入表单*/
+.m-form{
+}
+.m-form table{
+	font-size: 16px;
+	color: #4c6279;
+	margin-right: -20px;
+}
+.m-form table tr{
+	height: 70px;
+	line-height: 70px;
+}
+/*所在位置*/
+.m-loc{
+	font-size: 16px;
+	color: #728393;
+	height: 50px;
+	line-height: 50px;
+	background: #e3e9f2;
+}
+.m-loc a{
+	font-size: 16px;
+	color: #728393;
+}
+.m-loc a.login{
+	color: #37a5dd;
+}
+/*按钮*/
+.btn{
+	/* color: #FFFFFF; */
+	text-align: center;
+	font-size: 16px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.btn-nored{
+	color: #FFFFFF;
+	text-align: center;
+	font-size: 16px;
+}
+.btn img{
+	width: 22px;
+	vertical-align: middle;
+	padding: 0 10px;
+}
+.btn:hover,
+.btn-nored:hover{
+	opacity: .7;
+}
+.btn-sm1{
+	width: 133px;
+	height: 40px;
+	line-height: 40px;
+}
+.btn-sm2{
+	width: 169px;
+	height: 40px;
+	line-height: 40px;
+}
+.btn-sm3{
+	width: 126px;
+	height: 33px;
+	line-height: 33px;
+}
+.btn-lg1{
+	width: 225px;
+	height: 50px;
+	line-height: 50px;
+}
+.btn-lg2{
+	width: 269px;
+	height: 55px;
+	line-height: 55px;
+}
+.btn-xs{
+	width: 59px;
+	height: 24px;
+	line-height: 24px;
+}
+/*颜色*/
+.btn-normal{
+	color: #ffffff;
+	background: #4a6279;
+}
+.btn-yellow{
+	color: #ffffff;
+	background: #ff8a00;
+}
+.btn-primary{
+	background: #3ca4db;
+}
+.btn-danger{
+	background: #eb6564;
+}
+.btn-disabled{
+	background: #b7c4d3;
+}
+/*输入框*/
+.frm-input{
+	border: 1px solid #ced7e3;
+	padding-left: 10px;
+	height: 45px;
+	line-height: 45px;
+}
+.frm-input2{
+	display: inline-block;
+    height: 38px;
+    line-height: 38px;
+    font-size: 14px;
+    color: #595959;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    vertical-align: middle;
+	text-indent: 1em;
+}

@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>升级机构</title>
+<!--针对最新IE的渲染-->
+<meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+<!--手机端显示-->
+<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+<script th:src="@{/js/jQuery-v2.1.1.min.js}" type="text/javascript" charset="utf-8"></script>
+<script th:src="@{/js/bootstrap.js}" type="text/javascript" charset="utf-8"></script>
+<!-- 新加入第三方上传图片插件 -->
+<link rel="stylesheet" href="js/fileinput/fileinput.css" th:href="@{/js/fileinput/fileinput.css}" />
+<script th:src="@{/js/fileinput/fileinput.js}" type="text/javascript" charset="utf-8"></script>
+<script th:src="@{/js/fileinput/zh.js}" type="text/javascript" charset="utf-8"></script>
+<!--日期时间控件  -->
+<link rel="stylesheet" href="js/My97DatePicker/skin/WdatePicker.css" th:href="@{/js/My97DatePicker/skin/WdatePicker.css}" />
+<script th:src="@{/js/My97DatePicker/WdatePicker.js}" type="text/javascript" charset="utf-8"></script>
+
+<!--表单验证控件  -->
+<link rel="stylesheet" href="css/bootstrapValidator.css" th:href="@{/css/bootstrapValidator.css}" />
+<script th:src="@{/js/bootstrapValidator.js}" type="text/javascript" charset="utf-8"></script>
+<script th:src="@{/js/bootstrapValidator-zh_CN.js}" type="text/javascript" charset="utf-8"></script>
+<!-- 表格可控件 -->
+<!--bootstraptable样式 -->
+<link rel="stylesheet" href="css/bootstrap-table/bootstrap-table.css" type="text/css" th:href="@{/css/bootstrap-table/bootstrap-table.css}" />
+<script th:src="@{/js/bootstrap-table/bootstrap-table.min.js}" type="text/javascript" charset="utf-8"></script>
+<script th:src="@{/js/bootstrap-table/bootstrap-table-zh-CN.min.js}" type="text/javascript" charset="utf-8"></script>
+<!--图层控件  -->
+<script th:src="@{/js/layer/layer.js}" type="text/javascript" charset="utf-8"></script>
+<!--弹出框 -->
+<script th:src="@{/js/alert.js}" type="text/javascript" charset="utf-8"></script>
+
+
+<style>
+.file-caption-main:after {
+	content: "";
+	clear: both;
+}
+
+.kv-fileinput-caption {
+	height: 39px;
+	margin-top: 2px;
+}
+
+.icon-visible {
+	background-image: none;
+}
+</style>
+<style>
+.file-input-new, .file-input {
+	float: left;
+	width: 70%;
+	padding-right: 10px;
+}
+
+.only-one {
+	float: left;
+}
+
+.kv-fileinput-caption {
+	height: 34px;
+}
+</style>
+</head>
+<body class="container">
+	<div class="modal fade" id="Modal" tabindex="1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+	<div class="modal fade"  id="Modal2" tabindex="1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true"></div>
+	<div class="modal fade" id="Modal3" tabindex="1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true"></div>
+
+	<div class="modal-dialog " style="width: 1000px;">
+		<div class="modal-content" style="background-color: #fff;">
+			<div class="modal-header">
+				<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
+				<h4 class="modal-title" id="myModalLabel">服务机构信息</h4>
+			</div>
+			<div class="modal-body" style="overflow: auto;">
+
+				<form id="form-wizard" name="form-wizard" class="form-horizontal">
+
+					<div class="container-fluid" style="clear: both; border-top: 1px solid #e5e5e5;">
+						<div class="form-group col-lg-12">
+							<label style="font-size: 16px; margin: 10px;">企业基本信息</label>
+						</div>
+						<!--隐藏域  -->
+						<input id="userId" type="hidden" th:value="${userId}" /> <input id="enterpriseId" type="hidden" name="enterpriseId" th:value="${enterpriseAndServerDto.enterpriseId}" readonly="readonly" />
+						<div class="form-group">
+							<label class="col-sm-2 control-label">企业名称</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" id="enterpriseName" name="enterpriseName" th:value="${enterpriseAndServerDto.enterpriseName}" />
+							</div>
+
+							<label class="col-sm-2 control-label">社会统一信用代码</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="creditCode" name="creditCode" th:value="${enterpriseAndServerDto.creditCode}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">注册日期</label>
+							<div class="col-sm-4">
+								<input class="Wdate" type="text" name="registerTime" th:value="${enterpriseAndServerDto.registerTime}" onfocus="WdatePicker({el:this,dateFmt:'yyyy-MM-dd',onpicked:checkPlanStartTime(this)})" />
+							</div>
+
+							<label class="col-sm-2 control-label">法定代表人</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="legalPerson" name="legalPerson" th:value="${enterpriseAndServerDto.legalPerson}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">注册资金</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="registerCapital" name="registerCapital" th:value="${enterpriseAndServerDto.registerCapital}" />
+							</div>
+
+							<label class="col-sm-2 control-label">单位性质</label>
+							<div class="col-sm-4">
+								<select class="form-control" name="companyType">
+									<option value="">请选择</option>
+									<option th:each="data:${unitNatures}" th:value="${data.codeCode}" th:selected="${enterpriseAndServerDto.companyType == data.codeCode}" th:text="${data.codeName}"></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">服务类别(一)</label>
+							<div class="col-sm-4">
+								<select class="form-control" id="firstCategory" name="firstCategory" onchange="jumpPage();">
+									<option value="">请选择</option>
+									<option th:each="category:${categorys}" th:value="${category.codeCode}" th:selected="${enterpriseAndServerDto.firstCategory == category.codeCode}" th:text="${category.codeName}"></option>
+								</select>
+							</div>
+
+							<input id="scategory" type="hidden" th:value="${enterpriseAndServerDto.secondCategory}" /> <label class="col-sm-2 control-label">服务类别(二)</label>
+							<div class="col-sm-4">
+								<select class="form-control" id="secondCategory" name="secondCategory">
+
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label">联系人</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="linkMan" name="linkMan" th:value="${enterpriseAndServerDto.linkMan}" />
+							</div>
+
+							<label class="col-sm-2 control-label">手机号码</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="cellPhone" name="cellPhone" th:value="${enterpriseAndServerDto.cellPhone}" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label">办公电话</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="linkPhone" name="linkPhone" th:value="${enterpriseAndServerDto.linkPhone}" />
+							</div>
+
+							<label class="col-sm-2 control-label">电子邮箱</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="email" name="email" th:value="${enterpriseAndServerDto.email}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">传真</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="fax" name="fax" th:value="${enterpriseAndServerDto.fax}" />
+							</div>
+
+							<label class="col-sm-2 control-label">通讯地址</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="postalAddress" name="postalAddress" th:value="${enterpriseAndServerDto.postalAddress}" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label">企业网址</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="webSite" name="webSite" th:value="${enterpriseAndServerDto.webSite}" />
+							</div>
+
+							<label class="col-sm-2 control-label">是否有在线服务系统</label>
+							<div class="col-sm-4">
+								<select id="isServerSys" name="isServerSys" class="form-control" style="width: 120px; display: inline-block">
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select> <input class="form-control" id="isServerSysInput" name="isServerSysInput" th:value="${enterpriseAndServerDto.isServerSysInput}" style="width: 160px; display: inline-block" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label">是否有固定经营场所</label>
+							<div class="col-sm-4">
+								<select id="isBusinessPlace" name="isBusinessPlace" class="form-control">
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+							</div>
+
+							<label class="col-sm-2 control-label">服务场地总面积（平方米）</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="serverPlaceArea" name="serverPlaceArea" th:value="${enterpriseAndServerDto.serverPlaceArea}" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label">从业人员总数（人）</label>
+							<div class="col-sm-10">
+								<input class="form-control" id="employees" name="employees" th:value="${enterpriseAndServerDto.employees}" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label">营业执照</label>
+							<div class="col-sm-10">
+								<input id="businessLicencefile" type="file" name="file" />
+							<div class="input-append">
+								<input class="input-large" style="width: 240px; height: 37px;" readonly="readonly" type="hidden" id="businessLicence" name="businessLicence" th:value="${enterpriseAndServerDto.businessLicence}" /> 
+								<a onclick="donwFileFun($('#businessLicence'))"><span id="businessLicencespan" th:text="${enterpriseAndServerDto.businessLicence}"></span></a>
+								 <a class="btn btn-info" onclick="fileUpload($('#businessLicence'),$('#businessLicencefile'),$('#businessLicencespan'))">上传</a>
+								<!-- <a class="btn btn-info" onclick="donwFileFun($('#businessLicence'))">查看文件</a> -->
+								<a class="btn btn-info" onclick="delFileFun($('#businessLicence'),$('#businessLicencefile'),$('#businessLicencespan'))">删除</a>
+							</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">办公场所的产权证明或租用合同</label>
+							<div class="col-sm-10">
+								 <input id="contractAttachmentfile" type="file" name="file" />
+							<div class="input-append">
+								<input class="input-large" style="width: 240px; height: 37px;" readonly="readonly" type="hidden" id="contractAttachment" name="contractAttachment" th:value="${enterpriseAndServerDto.contractAttachment}" width="30%" /> 
+								<a onclick="donwFileFun($('#contractAttachment'))"><span id="contractAttachmentSpan" th:text="${enterpriseAndServerDto.contractAttachment}"></span></a>
+								<a class="btn btn-info" onclick="fileUpload($('#contractAttachment'),$('#contractAttachmentfile'),$('#contractAttachmentSpan'))">上传</a>
+								<!-- <a class="btn btn-info" onclick="donwFileFun($('#contractAttachment'))">查看文件</a> -->
+								<a class="btn btn-info" onclick="delFileFun($('#contractAttachment'),$('#contractAttachmentfile'),$('#contractAttachmentSpan'))">删除</a>
+							</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">其他附件</label>
+							<div class="col-sm-10">
+								 <input id="otherAttachmentfile" type="file" name="file" />
+							<div class="input-append">
+								<input class="input-large" style="width: 240px; height: 37px;" readonly="readonly" type="hidden" id="otherAttachment" name="otherAttachment" th:value="${enterpriseAndServerDto.otherAttachment}" width="30%" /> 
+								<a onclick="donwFileFun($('#otherAttachment'))"><span id="otherAttachmentSpan" th:text="${enterpriseAndServerDto.otherAttachment}"></span></a>
+								<a class="btn btn-info" onclick="fileUpload($('#otherAttachment'),$('#otherAttachmentfile'),$('#otherAttachmentSpan'))">上传</a>
+								<!-- <a class="btn btn-info" onclick="donwFileFun($('#otherAttachment'))">查看文件</a> -->
+								<a class="btn btn-info" onclick="delFileFun($('#otherAttachment'),$('#otherAttachmentfile'),$('#otherAttachmentSpan'))">删除</a>
+							</div>
+							</div>
+						</div>
+
+					</div>
+
+					<!-- 服务机构 -->
+					<div class="container-fluid" style="clear: both; border-top: 1px solid #e5e5e5;">
+						<div class="form-group">
+							<label style="font-size: 16px; margin: 10px;">服务机构信息</label>
+						</div>
+						<input id="serverOrgId" style="width: 500px;" type="hidden" name="serverOrgId" th:value="${enterpriseAndServerDto.serverOrgId}" />
+						<!--   
+				   <input id="state_val" type="hidden" name ="flag" th:value="${enterpriseAndServerDto.flag}" />  
+				   <input id="deptObjectId" type="hidden" name="deptObjectId" th:value="${enterpriseAndServerDto.deptObjectId}" /> 
+				   <input id="auditStatus" type="hidden" name="auditStatus" th:value="${enterpriseAndServerDto.auditStatus}" /> 
+				   <input id="auditOpinion" type="hidden" name="auditOpinion" th:value="${enterpriseAndServerDto.auditOpinion}" /> -->
+
+						<div class="form-group">
+							<label style="width: 20.5%;" class="control-label col-md-3">上一年度运营情况（单位：万元、家次）</label>
+							<div class="col-md-7" style="width: 71%;">
+								<table class="table table-bordered" id="eFromTable" width="99%" border="1px solid #e5e5e5;" cellspacing="0" cellpadding="0">
+									<tr>
+										<td style="text-align: center">资产总额</td>
+										<td style="text-align: center">净资产总额</td>
+										<td style="text-align: center">营业收入</td>
+										<td style="text-align: center">利润总额</td>
+										<td style="text-align: center">服务中小企业户数</td>
+
+									</tr>
+									<tr>
+										<td style="text-align: center"><input class="form-control" type="text" id="totalAsset" name="totalAsset" th:value="${enterpriseAndServerDto.totalAsset}" /></td>
+										<td style="text-align: center"><input class="form-control" type="text" id="totalNetAsset" name="totalNetAsset" th:value="${enterpriseAndServerDto.totalNetAsset}" /></td>
+										<td style="text-align: center"><input class="form-control" type="text" id="operatingIncome" name="operatingIncome" th:value="${enterpriseAndServerDto.operatingIncome}" /></td>
+										<td style="text-align: center"><input class="form-control" type="text" id="totalProfit" name="totalProfit" th:value="${enterpriseAndServerDto.totalProfit}" /></td>
+										<td style="text-align: center"><input class="form-control" type="text" id="establishment" name="establishment" th:value="${enterpriseAndServerDto.establishment}" /></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label style="width: 20.5%;" class="control-label col-md-3">机构简介</label>
+							<div class="col-md-7" style="width: 71%;">
+								<!-- <td style="text-align: center"><input class="form-control" type="text" name="sAbstract" th:value="${enterpriseAndServerDto.sAbstract}" /></td> -->
+								<textarea class="form-control" name="sAbstract" id="sAbstract" th:field="${enterpriseAndServerDto.sAbstract}"></textarea>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label style="width: 20.5%;" class="control-label col-md-3">特色服务产品介绍</label>
+							<div class="col-md-7" style="width: 71%;">
+								<textarea class="form-control" name="sCompant" id="sCompant" th:field="${enterpriseAndServerDto.sCompant}"></textarea>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label style="width: 20.5%;" class="control-label col-md-3">获得专业服务资质（称号）情况</label>
+							<div class="col-md-7" style="width: 71%;">
+								<table class="table table-bordered" id="cerTable" width="99%" border="1px solid #e5e5e5;" cellspacing="0" cellpadding="0">
+									<tr>
+										<td colspan="5" style="text-align: left;">
+											<button id="addCertification" type="button" class="btn btn-info">添加资质</button>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: center" colspan="5"><table id="zz-table"></table></td>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label style="width: 20.5%;" class="control-label col-md-3">获得政府相关部门授予的荣誉证书情况</label>
+							<div class="col-md-7" style="width: 71%;">
+								<table class="table table-bordered" id="honorTable" width="99%" border="1px solid #e5e5e5;" cellspacing="0" cellpadding="0">
+									<tr>
+										<td colspan="5" style="text-align: left;">
+											<button id="addHonor" type="button" class="btn btn-info">添加荣誉</button>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: center" colspan="5"><table id="ry-table"></table></td>
+									</tr>
+
+								</table>
+							</div>
+						</div>
+
+
+					</div>
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button id="saveSjjgButton" type="button" class="btn btn-primary">提交</button>
+				<button id="reset" onclick="javascript:window.close();" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+
+				<span id="tip"> </span>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	/*<![CDATA[*/
+
+	function delFileFun($el, $file,$span) {
+		$el.val("");
+		$file.val("");
+		$span.text("");
+	}
+	function donwFileFun($el) {
+		console.log($el.val());
+		if ($el.val() != "") {
+			var name = $el.val();
+			window.location.href = "/sys/download?fileName=" + name;
+		} else {
+			alert('请上传文件后再下载!!');
+		}
+	}
+	function fileUpload($el, $file, $span) {
+		var uploadFile = $file[0].files[0];
+		console.log("-----" + uploadFile);
+		if (uploadFile == undefined) {
+			alert('请选择文件,再上传!!!');
+			return;
+		} else {
+			var formData = new FormData();
+			formData.append('file', uploadFile);
+			console.log(uploadFile);
+			$.ajax({
+				url : '/enp/uploadFile',
+				type : 'POST',
+				data : formData,
+				async : false,
+				cache : false,
+				contentType : false,
+				processData : false,
+				success : function(returndata) {
+					alert('上传成功');
+					$el.val(returndata);
+					$span.text(returndata);
+
+				},
+				error : function(returndata) {
+					alert('上传失败！');
+				}
+			});
+		}
+	}
+	/*]]>*/
+</script>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		function checkPlanStartTime(obj) {
+			if (obj.value != null && obj.value != "" && obj.value != undefined) {
+				$("#form-wizard").data("bootstrapValidator").updateStatus(
+						"registerTime", "NOT_VALIDATED", null).validateField(
+						"registerTime");
+			}
+		}
+		$(function() {
+			$.fn.serializeObject = function() {
+				var o = {};
+				var a = this.serializeArray();
+				$.each(a, function() {
+					if (o[this.name]) {
+						if (!o[this.name].push) {
+							o[this.name] = [ o[this.name] ];
+						}
+						o[this.name].push(this.value || '');
+					} else {
+						o[this.name] = this.value || '';
+					}
+				});
+				return o;
+			};
+			$("#saveSjjgButton").click(
+					function() {
+						var flag = $('#form-wizard').bootstrapValidator(
+								'validate').data('bootstrapValidator')
+								.isValid();
+						if (flag) {
+							var str = $('#form-wizard').serializeObject();
+							$.post("/enp/enterprise-sjjg-save.json", {
+								models : JSON.stringify(str),
+								userId : $('#userId').val()
+							}, function(result) {
+								var resultObj = result;
+								if (resultObj.success) {
+									layer.alert("保存成功！");
+									setTimeout("window.history.go(-1)", 2000);
+									//$('#Modal').modal('hide');
+									//doQuery();
+								} else {
+									layer.alert(resultObj.msg);
+								}
+							})
+						}
+					});
+			$('#form-wizard')
+					.bootstrapValidator(
+							{
+								//		        live: 'disabled',
+								message : 'This value is not valid',
+								feedbackIcons : {
+									valid : 'glyphicon glyphicon-ok',
+									invalid : 'glyphicon glyphicon-remove',
+									validating : 'glyphicon glyphicon-refresh'
+								},
+								fields : {
+
+									enterpriseName : {
+										validators : {
+											notEmpty : {
+												message : '企业名称必填!'
+											}
+										}
+									},
+									creditCode : {
+										validators : {
+											notEmpty : {
+												message : '社会统一信用代码必填!'
+											}
+										}
+									},
+									registerTime : {
+										validators : {
+											notEmpty : {
+												message : '注册日期必填!'
+											}
+										}
+									},
+									legalPerson : {
+										validators : {
+											notEmpty : {
+												message : '法人代表必填!'
+											}
+										}
+									},
+									registerCapital : {
+										validators : {
+											notEmpty : {
+												message : '注册资金为必填!'
+											},
+											/*  regexp : {
+												regexp : /^[1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0|[1-9]\d*$/,
+												message : '注册资金格式不正确'
+											}, */
+											/* numeric : {
+												message : '注册资金为数值!'
+											}, */
+											callback : {
+												message : '注册资金格式有误(小数点前最多10位，小数点后最多4位)',
+												callback : function(value,
+														validator) {
+
+													var reg = /^[+]?\d{1,10}(?:\.\d{1,4})?$/;
+													//var ress = /\./;
+													var val = $(
+															'#registerCapital')
+															.val();
+													//console.log(reg.test(val));
+													if (reg.test(val)) {
+														return true;
+													}
+													return false;
+												}
+											}
+
+										}
+									},
+									companyType : {
+										validators : {
+											notEmpty : {
+												message : '单位性质为必填!'
+											}
+
+										}
+									},
+									linkMan : {
+										validators : {
+											notEmpty : {
+												message : '联系人为必填!'
+											}
+
+										}
+									},
+									fax : {
+										validators : {
+											notEmpty : {
+												message : '传真为必填!'
+											}
+
+										}
+									},
+									postalAddress : {
+										validators : {
+											notEmpty : {
+												message : '通讯地址为必填!'
+											}
+
+										}
+									},
+									webSite : {
+										validators : {
+											notEmpty : {
+												message : '企业网址为必填!'
+											},
+											uri : {
+												message : '格式不对(http://www.baidu.com)'
+											}
+										}
+									},
+									cellPhone : {
+										validators : {
+											notEmpty : {
+												message : '手机号码为必填!'
+											},
+											regexp : {
+												regexp : "^([0-9]{11})?$",
+												message : '手机号码格式错误!'
+											}
+
+										}
+									},
+									email : {
+										validators : {
+											notEmpty : {
+												message : '邮件地址为必填!'
+											},
+											emailAddress : {
+												message : '请输入正确的邮件地址如123@qq.com!'
+											}
+										}
+									},
+									serverPlaceArea : {
+										validators : {
+											notEmpty : {
+												message : '注册资金为必填!'
+											},
+											/* regexp : {
+											regexp : /^[1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0|[1-9]\d*$/,
+											message : '注册资金格式不正确'
+											},  */
+											/* numeric : {
+												message : '注册资金为数值!'
+											}, */
+											callback : {
+												message : '注册资金格式有误(小数点前最多10位，小数点后最多4位)',
+												callback : function(value,
+														validator) {
+
+													var reg = /^[+]?\d{1,10}(?:\.\d{1,4})?$/;
+													//var ress = /\./;
+													var val = $(
+															'#registerCapital')
+															.val();
+													//console.log(reg.test(val));
+													if (reg.test(val)) {
+														return true;
+													}
+													return false;
+												}
+											}
+
+										}
+									},
+									employees : {
+										validators : {
+											notEmpty : {
+												message : '从业人员总数为必填!'
+											},
+											digits : {
+												message : '从业人员总数只能为正整数!!'
+											}
+										}
+									},
+									totalAsset : {
+										validators : {
+											notEmpty : {
+												message : '资产总额不为空'
+											},
+											regexp : {
+												regexp : /^[1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0|[1-9]\d*$/,
+												message : '资产总额格式不正确'
+											},
+											callback : {
+												message : '资产总额格式有误(小数点前最多10位，小数点后最多4位)',
+												callback : function(value,
+														validator) {
+
+													var reg = /^[+]?\d{1,10}(?:\.\d{1,4})?$/;
+													//var ress = /\./;
+													var val = $('#totalAsset')
+															.val();
+													//console.log(reg.test(val));
+													if (reg.test(val)) {
+														return true;
+													}
+													return false;
+												}
+											}
+										}
+									},
+									totalNetAsset : {
+										validators : {
+											notEmpty : {
+												message : '净资产总额不为空'
+											},
+											callback : {
+												message : '净资产总额格式有误(小数点前最多10位，小数点后最多4位)',
+												callback : function(value,
+														validator) {
+
+													var reg = /^[+]?\d{1,10}(?:\.\d{1,4})?$/;
+													//var ress = /\./;
+													var val = $(
+															'#totalNetAsset')
+															.val();
+													//console.log(reg.test(val));
+													if (reg.test(val)) {
+														return true;
+													}
+													return false;
+												}
+											}
+										}
+									},
+									operatingIncome : {
+										validators : {
+											notEmpty : {
+												message : '营业收入不为空'
+											},
+											/* regexp : {
+												regexp : /^[1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0|[1-9]\d*$/,
+												message : '营业收入格式不正确'
+											} */
+											callback : {
+												message : '营业收入格式有误(小数点前最多10位，小数点后最多4位)',
+												callback : function(value,
+														validator) {
+
+													var reg = /^[+]?\d{1,10}(?:\.\d{1,4})?$/;
+													//var ress = /\./;
+													var val = $(
+															'#operatingIncome')
+															.val();
+													//console.log(reg.test(val));
+													if (reg.test(val)) {
+														return true;
+													}
+													return false;
+												}
+											}
+										}
+									},
+									totalProfit : {
+										validators : {
+											notEmpty : {
+												message : '利润总额不为空'
+											},
+											/* regexp : {
+												regexp : /^[1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0|[1-9]\d*$/,
+												message : '利润总额格式不正确'
+											} */
+											callback : {
+												message : '利润总额格式有误(小数点前最多10位，小数点后最多4位)',
+												callback : function(value,
+														validator) {
+
+													var reg = /^[+]?\d{1,10}(?:\.\d{1,4})?$/;
+													//var ress = /\./;
+													var val = $(
+															'#totalProfit')
+															.val();
+													//console.log(reg.test(val));
+													if (reg.test(val)) {
+														return true;
+													}
+													return false;
+												}
+											}
+										}
+									},
+									establishment : {
+										validators : {
+											notEmpty : {
+												message : '服务中小企业户数不为空'
+											},
+											digits : {
+												message : '服务中小企业户数只能为正整数!!'
+											}
+										}
+									},
+									sAbstract : {
+										validators : {
+											notEmpty : {
+												message : '机构简介不为空'
+											},
+											stringLength : {
+												min : 1,
+												max : 500,
+												message : '机构简介长度必须在1到500位之间'
+											}
+										}
+									},
+									sCompant : {
+										validators : {
+											notEmpty : {
+												message : '特色服务产品介绍不为空'
+											},
+											stringLength : {
+												min : 1,
+												max : 500,
+												message : '特色服务产品介绍长度必须在1到500字之间'
+											}
+										}
+									}
+
+								}
+							});
+
+			//
+			$("#addCertification").click(function() {
+				//var id = $("#id").val();
+
+				var id = $('#serverOrgId').val();
+				//alert(id);
+				$('#Modal').modal('show');
+				$('#Modal').load('../sys/certification-add?sid=' + id);
+			});
+
+			$("#addHonor").click(function() {
+				//var id = $("#id").val();
+				var id = $('#serverOrgId').val();
+				//alert(id);
+				$('#Modal').modal('show');
+				$('#Modal').load('../sys/honor-certificate-add?sid=' + id);
+			});
+
+			//提交按钮,所有验证通过方可提交
+			/* $("#saveButton").click(
+					function() {
+						var flag = $('#form-wizard').bootstrapValidator(
+								'validate').data('bootstrapValidator')
+								.isValid();
+						if (flag) {
+							var str = $('#form-wizard').serializeObject();
+							var models = new Array();
+							models.push(str);
+							$.post("sys/enter-org-info-save.json", {
+								models : JSON.stringify(models)
+							}, function(result) {
+								var resultObj = result.ajaxResultJson;
+								if (resultObj.success) {
+									layer.alert("保存成功！");
+									$('#Modal').modal('hide');
+									display_result();
+								} else {
+									layer.alert(resultObj.msg);
+								}
+							})
+						}
+					}); */
+
+			jumpPage();
+
+			//失去焦点事件
+			$("#enterpriseName")
+					.blur(
+							function() {
+								var val = $(this).val();
+								if (val == "")
+									return;
+								$
+										.ajax({
+											url : "../sys/s-org-enterprise-check.json?enterpriseName="
+													+ encodeURI(encodeURI(val)),
+											data : '',
+											type : "POST",
+											dataType : "json",
+											success : function(data,
+													textStatus, jqXHR) {
+												if (data != null && data != '') {
+													var Data = data;
+													for ( var key in Data) {
+														if (key == "id") {
+															$(
+																	"input[name='enterpriseId']")
+																	.val(
+																			Data[key]);
+														} else if (key == "enterpriseName") {
+															$(
+																	"input[name='enterpriseName']")
+																	.val(val);
+														} else {
+															$(
+																	"input[name='"
+																			+ key
+																			+ "']")
+																	.val(
+																			Data[key]);
+															$(
+																	"input[name='"
+																			+ key
+																			+ "'][value='"
+																			+ Data[key]
+																			+ "']")
+																	.attr(
+																			"checked",
+																			true); //radio 赋值
+															$(
+																	"select#"
+																			+ key
+																			+ " option[value='"
+																			+ Data[key]
+																			+ "']")
+																	.attr(
+																			'selected',
+																			'true'); //select option 赋值
+														}
+
+													}
+												}
+											},
+											error : function(jqXHR, textStatus,
+													errorThrown) {
+											}
+
+										});
+							});
+
+		})
+
+		//导航样式
+		function changeMenu(selector, addClaName, reClaName, selector1) {
+			$(selector).click(function() {
+				$(selector).removeClass(reClaName);
+				$(this).addClass(addClaName);
+				$k = $(this).index();
+				$(selector1).eq($k).css({
+					display : "block"
+				}).siblings().css({
+					display : "none"
+				});
+			});
+		}
+
+		function showEnterInfo() {
+			$('#Modal2').modal('show');
+			$('#Modal2').load('sys/s-org-enterprise-check');
+		}
+
+		//服务级别  级联 
+		function jumpPage() {
+			var fcategory = $("#firstCategory").val();
+			var scategory = $("#scategory").val();
+			$
+					.ajax({
+						url : "../sys/s-org-fcategory-check.json?codeCode="
+								+ fcategory,
+						type : 'post',
+						data : '',
+						dataType : "json",
+						success : function(data, textStatus, jqXHR) {
+							var items = data;
+							var selectModel = $("#secondCategory");
+							selectModel.empty();
+							selectModel
+									.append("<option value=''>-请选择-</option>");
+							if (items != null) {
+								for ( var i in items) {
+									var item = items[i];
+									if (scategory == item.codeCode) {
+										selectModel
+												.append("<option value = '"+item.codeCode+"' selected=\"true\" >"
+														+ item.codeName
+														+ "</option>");
+									} else {
+										selectModel
+												.append("<option value = '"+item.codeCode+"'>"
+														+ item.codeName
+														+ "</option>");
+									}
+								}
+							} else {
+								selectModel.empty();
+							}
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+						}
+					});
+
+		}
+
+		/*]]>*/
+	</script>
+
+	<script>
+		/* 表格控件 */
+		$(function() {
+			initTable();
+			ryTable();
+			//$('#zz-table').bootstrapTable('hideColumn', 'id');
+
+		});
+		function initTable() {
+			/*
+			window.operateEvents = {
+				'click .RoleOfdelete' : function(e, value, row, index) {
+					$('#Modal').modal('show');
+					$('#Modal').load(
+							'enp/enterprise-history-info-list2?enterpriseName='
+									+ row.enterpriseName + '');
+				},
+				'click .RoleOfedit' : function(e, value, row, index) {
+					alert(2);
+				}
+			};*/
+
+			$('#zz-table').bootstrapTable('destroy');
+			// 生成企业信息数据
+			$('#zz-table')
+					.bootstrapTable(
+							{
+								method : 'post',
+								contentType : "application/x-www-form-urlencoded",
+								url : "/sys/getCertificationList",
+								//height : tableHeight(),// 高度调整
+								cache : false,
+								striped : true, // 是否显示行间隔色
+								//dataField : "res",
+								pageNumber : 1, // 初始化加载第一页，默认第一页
+								pagination : true,// 是否分页
+								queryParamsType : 'limit',
+								queryParams : queryParams,
+								sortable : false,
+								sortOrder : 'desc',
+								sidePagination : 'server',
+								pageSize : 5,// 单页记录数
+								pageList : [ 5, 10, 20, 30 ],// 分页步进值
+								showRefresh : false,// 刷新按钮
+								showColumns : false,
+								//sortName : 'enterpriseName',
+								clickToSelect : true,// 是否启用点击选中行
+								toolbarAlign : 'left',
+								buttonsAlign : 'right',// 按钮对齐方式
+								idField : 'id',
+								//sortable : true,
+								//toolbar : '#toolbar',
+								responseHandler : function(res) {
+									if (res) {
+										var s = parseInt($("#totalNum").val());
+										var totalNums = parseInt(res.total) + s;
+										$("#totalNumber").html(
+												"&nbsp;您共申请&nbsp;" + totalNums
+														+ "&nbsp;项应用。");
+										return {
+											"rows" : res.data,
+											"total" : res.total
+										};
+
+									} else {
+										return {
+											"rows" : [],
+											"total" : 0
+										};
+									}
+								},
+								onLoadSuccess : function(data) {
+									console.log(data);
+									//alert('加载成功 !');
+								},
+								onLoadError : function() {
+									alert('加载失败!');
+								},
+								columns : [ /* {
+																																																																					title : '全选',
+																																																																					field : 'select',
+																																																																					checkbox : true,
+																																																																					width : 25,
+																																																																					align : 'center',
+																																																																					valign : 'middle'
+																																																																				},  */
+										/* {
+											title : 'ID',
+											field : 'id',
+											visible : false
+										}, */
+										{
+											title : '序号',
+											field : 'id',
+											sortable : false,
+											formatter : function(value, row,
+													index) {
+												return index + 1;
+											}
+										},
+										{
+											title : '资质名称',
+											field : 'name',
+											sortable : true
+										},
+										{
+											title : '获得时间',
+											field : 'getTime',
+											formatter : function(value, row,
+													index) {
+												return value;
+											}
+										},
+										{
+											title : '有效期',
+											field : 'validity',
+										},
+										/* {
+											title : '文件',
+											field : 'filePath',
+											formatter : function(value, row,
+													index) {
+												return value;
+											}
+										}, */
+										{
+											title : '操作',
+											field : 'id',
+											formatter : function(value, row,
+													index) {
+												var id = row.id;
+												var e;
+												e = '<button type="button" class="btn btn-info" onclick="editC(\''
+														+ id
+														+ '\')">修改</button> <button type="button" class="btn btn-danger"  onclick="delcfmC(\''
+														+ id
+														+ '\')">删除</button>';
+												return e;
+											},
+											events : 'operateEvents'
+										} ],
+								locale : 'zh-CN',// 中文支持,
+							})
+			function operateFormatter(value, row, index) {
+				alert(122);
+				return value;
+			}
+
+			function queryParams(params) {
+				console.info("=当前页=" + params.pageNumber);
+				console.log("排序=" + params.sort + ",升OR降=" + params.order);
+				var entity = {
+					limit : params.limit,
+					pageNumber : params.pageNumber,
+					sort : params.sort,
+					order : params.order,
+					sid : $("#serverOrgId").val()
+				};
+				return entity;
+			}
+			;
+		}
+
+		function ryTable() {
+
+			$('#ry-table').bootstrapTable('destroy');
+			// 生成企业信息数据
+			$('#ry-table')
+					.bootstrapTable(
+							{
+								method : 'post',
+								contentType : "application/x-www-form-urlencoded",
+								url : "/sys/getHonorCertificateList",
+								//height : tableHeight(),// 高度调整
+								cache : false,
+								striped : true, // 是否显示行间隔色
+								//dataField : "res",
+								pageNumber : 1, // 初始化加载第一页，默认第一页
+								pagination : true,// 是否分页
+								queryParamsType : 'limit',
+								//得到查询的参数
+								queryParams : function(params) {
+									//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+									var temp = {
+										limit : params.limit,
+										pageNumber : params.pageNumber,
+										sort : params.sort,
+										order : params.order,
+										sid : $("#serverOrgId").val()
+									};
+									return temp;
+								},
+								sortable : false,
+								sortOrder : 'desc',
+								sidePagination : 'server',
+								pageSize : 5,// 单页记录数
+								pageList : [ 5, 10, 20, 30 ],// 分页步进值
+								showRefresh : false,// 刷新按钮
+								showColumns : false,
+								//sortName : 'enterpriseName',
+								clickToSelect : true,// 是否启用点击选中行
+								toolbarAlign : 'left',
+								buttonsAlign : 'right',// 按钮对齐方式
+								idField : 'id',
+								//sortable : true,
+								//toolbar : '#toolbar',
+								responseHandler : function(res) {
+									if (res) {
+										var s = parseInt($("#totalNum").val());
+										var totalNums = parseInt(res.total) + s;
+										$("#totalNumber").html(
+												"&nbsp;您共申请&nbsp;" + totalNums
+														+ "&nbsp;项应用。");
+										return {
+											"rows" : res.data,
+											"total" : res.total
+										};
+
+									} else {
+										return {
+											"rows" : [],
+											"total" : 0
+										};
+									}
+								},
+								onLoadSuccess : function(data) {
+									console.log(data);
+									//alert('加载成功 !');
+								},
+								onLoadError : function() {
+									alert('加载失败!');
+								},
+								columns : [
+										/* {
+										title : '全选',
+										field : 'select',
+										checkbox : true,
+										width : 25,
+										align : 'center',
+										valign : 'middle'
+										},  */
+										/* {
+											title : 'ID',
+											field : 'id',
+											visible : false
+										}, */
+										{
+											title : '序号',
+											field : 'id',
+											sortable : false,
+											formatter : function(value, row,
+													index) {
+												return index + 1;
+											}
+										},
+										{
+											title : '荣誉称号',
+											field : 'name',
+											sortable : true
+										},
+										{
+											title : '获得时间',
+											field : 'getTime',
+											formatter : function(value, row,
+													index) {
+												if (value == null) {
+													return "";
+												}
+												return value;
+											}
+										},
+										{
+											title : '有效期',
+											field : 'validity',
+										},
+										/* {
+											title : '文件',
+											field : 'filePath',
+											formatter : function(value, row,
+													index) {
+												return value;
+											}
+										}, */
+										{
+											title : '操作',
+											field : 'id',
+											formatter : function(value, row,
+													index) {
+												var id = row.id;
+												var e;
+												e = '<button type="button" class="btn btn-info" onclick="editH(\''
+														+ id
+														+ '\')">修改</button> <button type="button" class="btn btn-danger"  onclick="delcfmH(\''
+														+ id
+														+ '\')">删除</button>';
+												return e;
+											},
+											events : 'operateEvents'
+										} ],
+								locale : 'zh-CN',// 中文支持,
+							})
+
+		}
+
+		//编辑服务
+		function editC(id) {
+			$('#Modal2').modal('show');
+			$('#Modal2').load('../sys/certification-edit?id=' + id);
+		}
+
+		//编辑服务
+		function editH(id) {
+			$('#Modal2').modal('show');
+			$('#Modal2').load('../sys/honor-certificate-edit?id=' + id);
+		}
+
+		function delcfmC(id) {
+			window.Ewin.confirm({
+				title : '提示',
+				message : '是否要删除您当前的资质信息？'
+			}).on(function(e) {
+				if (e) {
+					$.post("../sys/certification-delete", {
+						cid : id
+					}, function(e) {
+						console.log(e);
+						if (e.success) {
+							window.Ewin.alert({
+								message : e.msg
+							});
+							$('#zz-table').bootstrapTable('refresh'); // 刷新表格
+						}
+					}, 'json');
+				}
+			});
+		}
+
+		function delcfmH(id) {
+			window.Ewin.confirm({
+				title : '提示',
+				message : '是否要删除您当前的荣誉信息？'
+			}).on(function(e) {
+				if (e) {
+					$.post("../sys/honor-certificate-delete", {
+						hid : id
+					}, function(e) {
+						console.log(e);
+						if (e.success) {
+							window.Ewin.alert({
+								message : e.msg
+							});
+							$('#ry-table').bootstrapTable('refresh'); // 刷新表格
+						}
+					}, 'json');
+				}
+			});
+		}
+	</script>
+
+	<!-- 上传营业执照-->
+	<script type="text/javascript">
+		//初始化上传控件
+		initFileInput("uploadfile", "/apk_upload", "businessLicence");
+		initFileInput("contractUploadfile", "/apk_upload", "contractAttachment");
+		initFileInput("otherUploadfile", "/apk_upload", "otherAttachment");
+		//初始上传控件  方法
+		function initFileInput(ctrlName, uploadUrl, el) {
+
+			var control = $('#' + ctrlName);
+			var el = $('#' + el);
+			console.log("222-----------" + el.val());
+			if (el.val() != "") {
+				control.fileinput({
+					language : 'zh', //设置语言
+					uploadUrl : "/apk_upload", //上传的地址
+					allowedFileExtensions : [ 'rar', 'zip', 'pdf', 'xls',
+							'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'jpg', 'png',
+							'bmp', 'jpeg' ],//接收的文件后缀 
+					uploadAsync : true, //默认异步上传a
+					//initialPreview:{http://localhost:7777/images/ed08346a-f38b-406a-9c2d-78969e44f28f.jpg}
+					showUpload : true, //是否显示上传按钮
+					allowedPreviewTypes : [ 'image', 'html', 'video', 'audio',
+							'flash', 'pdf', 'object' ],
+					/* allowedFileTypes : [ 'image', 'html',  'video', 'audio', 'flash', 'pdf', 'object' ],  */
+					//window:true,
+					maxFileSize : 500000,
+					showRemove : true, //显示移除按钮
+					showPreview : false, //是否显示预览
+					showCaption : true,//是否显示标题
+					browseClass : "btn btn-primary", //按钮样式     
+					dropZoneEnabled : false,//是否显示拖拽区域
+					maxFileCount : 1, //表示允许同时上传的最大文件个数
+					enctype : 'multipart/form-data',
+					validateInitialCount : true,
+					overwriteInitial : false,
+					initialPreviewAsData : true,
+					initialPreview : [ "/images/" + el.val() ],
+					initialPreviewConfig : [ {
+						caption : el.val(),
+						size : 329892,
+						width : "120px",
+						url : "/images/" + el.val(),
+						key : 1
+					} ]
+
+				});
+			} else {
+				control.fileinput({
+					language : 'zh', //设置语言
+					uploadUrl : "/apk_upload", //上传的地址
+					allowedFileExtensions : [ 'rar', 'zip', 'pdf', 'xls',
+							'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'jpg', 'png',
+							'bmp', 'jpeg' ],//接收的文件后缀 */
+					uploadAsync : true, //默认异步上传a
+					//initialPreview:{http://localhost:7777/images/ed08346a-f38b-406a-9c2d-78969e44f28f.jpg}
+					showUpload : true, //是否显示上传按钮
+					allowedPreviewTypes : [ 'image', 'html', 'video', 'audio',
+							'flash', 'pdf', 'object' ],
+					/* allowedFileTypes : [ 'image', 'html',  'video', 'audio', 'flash', 'pdf', 'object' ],  */
+					//window:true,
+					maxFileSize : 500000,
+					showRemove : true, //显示移除按钮
+					showPreview : false, //是否显示预览
+					showCaption : true,//是否显示标题
+					browseClass : "btn btn-primary", //按钮样式     
+					dropZoneEnabled : false,//是否显示拖拽区域
+					maxFileCount : 1, //表示允许同时上传的最大文件个数
+					enctype : 'multipart/form-data',
+					validateInitialCount : true,
+					overwriteInitial : false,
+					initialPreviewAsData : true
+				});
+			}
+		}
+
+		/*营业执照 */
+		//异步上传返回结果处理
+		$("#uploadfile").on("fileuploaded",
+				function(event, data, previewId, index) {
+					var response = data.response;
+					//alert(response.filePath);
+					$("#businessLicence").val(response.filePath);
+				});
+		/*/点击删除后立即执行 
+		$('#uploadfile').on('filesuccessremove', function(event, data, previewId, index) { 
+			  $('#uploadfile').fileinput('refresh');//文件框刷新操作  
+			});*/
+		//上传前
+		$('#uploadfile')
+				.on(
+						'filepreupload',
+						function(event, data, previewId, index) {
+							var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
+						});
+		/*  合同*/
+		//异步上传返回结果处理
+		$("#contractUploadfile").on("fileuploaded",
+				function(event, data, previewId, index) {
+					var response = data.response;
+					//alert(response.filePath);
+					$("#contractAttachment").val(response.filePath);
+				});
+		//上传前
+		$('#contractUploadfile')
+				.on(
+						'filepreupload',
+						function(event, data, previewId, index) {
+							var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
+						});
+		/* 其他附件 */
+		//异步上传返回结果处理
+		$("#otherUploadfile").on("fileuploaded",
+				function(event, data, previewId, index) {
+					var response = data.response;
+					//alert(response.filePath);
+					$("#otherAttachment").val(response.filePath);
+				});
+		//上传前
+		$('#otherUploadfile')
+				.on(
+						'filepreupload',
+						function(event, data, previewId, index) {
+							var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
+						});
+	</script>
+</body>
+</html>

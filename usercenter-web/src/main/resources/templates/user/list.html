@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="/user/include">
+<meta charset="UTF-8" />
+<title>userList</title>
+<!-- <script type="text/javascript" th:src="@{/js/jquery-2.0.3.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min3.1.1.js}"></script>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min3.1.1.css}"></link>
+
+
+
+新加入第三方上传文件插件
+<link rel="stylesheet" href="js/fileinput/fileinput.css" th:href="@{/js/fileinput/fileinput.css}" />
+<script th:src="@{/js/fileinput/fileinput.js}" type="text/javascript" charset="utf-8"></script>
+<script th:src="@{/js/fileinput/zh.js}" type="text/javascript" charset="utf-8"></script>
+ -->
+ 	
+</head>
+<body class="container">
+	<br />
+	<h1>用户列表</h1>
+	<br />
+	<br />
+	<div class="btn-group">
+		<button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown">
+			admin,欢迎您! <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu">
+			<li><a href="javascript:void(0);" onclick="window.open('http://localhost:8085/toEdit?id=ff80808163d4c8fb0163d80e26210002','_self')">修改用户</a></li>
+			<li class="divider"></li>
+			<li><a href="javascript:void(0);" onclick="window.open('http://localhost:8085/enp/enterprise-info-edit?id=ff80808163d4c8fb0163d80e26210002','_self')">完善企业信息</a></li>
+			<li class="divider"></li>
+			<li><a href="javascript:void(0);" onclick="window.open('http://localhost:8085/enp/enterprise-info-sjjg?id=ff80808163d4c8fb0163d80e26210002','_self')">完善机构信息</a></li>
+			<li class="divider"></li>
+			<li><a href="javascript:void(0);" onclick="window.open('http://localhost:8085/toPwd?id=ff80808163d4c8fb0163d80e26210002','_self');">修改密码</a></li>
+			<li class="divider"></li>
+			<li><a href="javascript:void(0);" onclick="alert('用户已注销')">注销用户</a></li>
+		</ul>
+	</div>
+	<form id="form-wizard" name="form-wizard" class="form-horizontal">
+
+		<div class="container-fluid" style="clear: both; border-top: 1px solid #e5e5e5;">
+			<div class="form-group">
+				<label style="width: 20.5%;" class="control-label col-md-3">营业执照</label>
+				<div class="col-lg-7" style="width: 71%;">
+					<!--  <input type="text" name="url" /> <input id="lefile" name="file" type="file" style="display: none" />
+								<div class="input-append">
+									<input id="photoCover" class="input-large" type="text" style="height: 30px;" /> <a class="btn btn-success" onclick="$('input[id=lefile]').click();">选择文件</a> <a class="btn btn-info" onclick="">上传</a> <a class="btn btn-info" onclick="">下载</a>
+								</div>  -->
+					<!-- <a href="#" onclick="uploadHtFun();">上传附件</a>  -->
+					<input type="file" style="height: 37px;" name="uploadfile" id="uploadfile" multiple="multiple" class="file" /> <input class="form-control" type="hidden" id="businessLicence" name="businessLicence"  width="30%" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label style="width: 20.5%;" class="control-label col-md-3">办公场所的产权证明或租用合同</label>
+				<div class="col-lg-7" style="width: 71%;">
+					<!-- <a href="#" onclick="uploadHtFun();">上传附件</a>  -->
+					<input type="file" style="height: 37px;" name="contractUploadfile" id="contractUploadfile" multiple="multiple" class="file" /> <input class="form-control" type="hidden" id="contractAttachment" name="contractAttachment"  width="30%" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label style="width: 20.5%;" class="control-label col-md-3">其他附件</label>
+				<div class="col-lg-7" style="width: 71%;">
+					<!-- <a href="#" onclick="uploadOtherFun();">上传附件</a>  -->
+					<input type="file" style="height: 37px;" name="otherUploadfile" id="otherUploadfile" multiple="multiple" class="file" /> <input class="form-control" type="hidden" id="otherAttachment" name="otherAttachment"  width="30%" />
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="with:80%">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>User Name</th>
+					<th>Password</th>
+					<th>Age</th>
+					<th>Edit</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="user : ${users}">
+					<th scope="row" th:text="${user.id}">1</th>
+					<td th:text="${user.userName}">neo</td>
+					<td th:text="${user.password}">Otto</td>
+					<!--  <td th:text="${user.age}">6</td> -->
+					<td><a th:href="@{/toEdit(id=${user.id})}">修改</a></td>
+					<td><a th:href="@{/delete(id=${user.id})}">删除</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="form-group">
+		<div class="col-sm-2 control-label">
+			<a href="/toAdd" th:href="@{/toAdd}" class="btn btn-info">用户注册</a>
+		</div>
+	</div>
+
+<script>
+	/*<![CDATA[*/
+		
+		 /* $("#uploadfile").fileinput({
+        uploadUrl: '/apk_upload', // you must set a valid URL here else you will get an error
+        allowedFileExtensions : ['jpg', 'png','gif'],
+        overwriteInitial: false,
+        maxFileSize: 1000,
+        maxFilesNum: 10,
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function(filename) {
+			//alert(filename.replace('(', '_').replace(']', '_'));
+            return filename.replace('(', '_').replace(']', '_');
+        }
+	});  */
+	
+		// $(function() {
+			//初始化上传控件
+			initFileInput("uploadfile", "/apk_upload", "businessLicence");
+			initFileInput("contractUploadfile", "/apk_upload",
+					"contractAttachment");
+			initFileInput("otherUploadfile", "/apk_upload", "otherAttachment");
+			//初始上传控件  方法
+			function initFileInput(ctrlName, uploadUrl, el) {
+				console.log("初始化组件方法--" +"上传组件--"+ ctrlName+"上传路径--"+uploadUrl+"返回值--"+el);
+				var control = $('#' + ctrlName);
+				var el = $('#' + el);
+				
+				if (el.val() != "") {
+					
+					 control.fileinput({
+						language : 'zh', //设置语言
+						uploadUrl : "/apk_upload", //上传的地址
+						allowedFileExtensions : [ 'gif','jpg', 'png', 'bmp' ], //接收的文件后缀
+						uploadAsync : true, //默认异步上传a
+						//initialPreview:{http://localhost:7777/images/ed08346a-f38b-406a-9c2d-78969e44f28f.jpg}
+						showUpload : true, //是否显示上传按钮
+						allowedPreviewTypes : [ 'image', 'html', 'text', 'video', 'audio', 'flash', 'pdf', 'object' ],
+					 	allowedFileTypes : [ 'image', 'html', 'text', 'video', 'audio', 'flash', 'pdf', 'object' ], 
+						//window:true,
+						showRemove : false, //显示移除按钮
+						showPreview : false, //是否显示预览
+						showCaption : true,//是否显示标题
+						//browseClass : "btn btn-primary", //按钮样式     
+						dropZoneEnabled : false,//是否显示拖拽区域
+						maxFileCount : 1, //表示允许同时上传的最大文件个数
+						enctype : 'multipart/form-data',
+						validateInitialCount : true,
+						overwriteInitial : false,
+						initialPreviewAsData : true,
+						initialPreview : [ "/images/" + el.val() ],
+						initialPreviewConfig : [ {
+							caption : el.val(),
+							size : 329892,
+							width : "120px",
+							url : "/images/" + el.val(),
+							key : 1
+						} ]
+
+					}); 
+					
+				} else {
+					
+					  control.fileinput({
+						//language : 'zh', //设置语言
+						uploadUrl : "/apk_upload", //上传的地址
+						allowedFileExtensions : ['jpg', 'png','gif'],
+						
+						//uploadAsync : true, //默认异步上传a
+						//initialPreview:{http://localhost:7777/images/ed08346a-f38b-406a-9c2d-78969e44f28f.jpg}
+						//showUpload : true, //是否显示上传按钮
+						//allowedPreviewTypes : [ 'image', 'html', 'text', 'video', 'audio', 'flash', 'pdf', 'object' ],
+						//allowedFileTypes : [ 'image', 'html', 'text', 'video', 'audio', 'flash', 'pdf', 'object' ], 
+						//window:true,
+						//showRemove : true, //显示移除按钮
+						//showPreview : true, //是否显示预览
+						//showCaption : true,//是否显示标题
+						//browseClass : "btn btn-primary", //按钮样式     
+						//dropZoneEnabled : false,//是否显示拖拽区域
+						//maxFileCount : 1, //表示允许同时上传的最大文件个数
+						//enctype : 'multipart/form-data',
+						//validateInitialCount : true,
+						//overwriteInitial : false,
+						//initialPreviewAsData : true
+					});  
+					
+					
+				}
+			};
+			
+			//营业执照 
+
+			/* //异步上传返回结果处理
+			$("#uploadfile").on("fileuploaded",
+					function(event, data, previewId, index) {
+					alert("fileuploaded");
+						var response = data.response;
+						//alert(response.filePath);
+						$("#businessLicence").val(response.filePath);
+					});
+			//上传前
+			$('#uploadfile')
+					.on(
+							'filepreupload',
+							function(event, data, previewId, index) {
+								alert("filepreupload");
+								var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
+							});
+			//合同
+			//异步上传返回结果处理
+			$("#contractUploadfile").on("fileuploaded",
+					function(event, data, previewId, index) {
+						var response = data.response;
+						//alert(response.filePath);
+						$("#contractAttachment").val(response.filePath);
+					});
+			//上传前
+			$('#contractUploadfile')
+					.on(
+							'filepreupload',
+							function(event, data, previewId, index) {
+								var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
+							});
+			//其他附件 
+			//异步上传返回结果处理
+			$("#otherUploadfile").on("fileuploaded",
+					function(event, data, previewId, index) {
+						var response = data.response;
+						//alert(response.filePath);
+						$("#otherAttachment").val(response.filePath);
+					});
+			//上传前
+			$('#otherUploadfile')
+					.on(
+							'filepreupload',
+							function(event, data, previewId, index) {
+								var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
+							});
+			*/
+
+		//});  
+		/*]]>*/
+	</script>
+</body>
+</html>

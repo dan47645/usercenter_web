@@ -1,0 +1,122 @@
+.reglist .title{
+	height: 120px;
+	background: #FFFFFF;
+	box-shadow: 0 2px 3px rgba(0,0,0,.1);
+	padding-top: 30px;
+}
+.reglist .title p{
+	height: 81px;
+	line-height: 81px;
+	font-size: 27px;
+	color: #4c6279;
+	padding-left: 30px;
+	background: url(../img/line2.png) left center no-repeat;
+}
+.reglist .list-wrap{
+	overflow: hidden;
+	margin-right: -20px;
+	margin-top: 1px;
+}
+.reglist .list-item{
+	width: 225px;
+	height: 377px;
+	padding: 30px;
+	background: #f2f6fb;
+	margin-right: 20px;
+}
+.reglist .list-item h3{
+	font-size: 24px;
+	color: #4a6178;
+	padding-top: 29px;
+	padding-bottom: 40px;
+	
+}
+.reglist .list-item p{
+	font-size: 16px;
+	color: #738495;
+	line-height: 36px;
+	padding-bottom: 10px;
+	height: 72px;
+	overflow: hidden;
+}
+.reglist .linktop{
+	padding-top: 30px;
+}
+.regform .title{
+	font-size: 24px;
+	font-weight: normal;
+	color: #4c6279;
+	padding: 30px 0;
+}
+.regform .step{
+	padding-bottom: 13px;
+}
+.regform .step-tit{
+	display: inline-block;
+	width: 300px;
+	text-align: center;
+	font-size: 18px;
+	color: #4c6279;
+}
+.regform .cont{
+	background: #FFFFFF;
+	padding: 40px 30px;
+}
+.regform table{
+	width: 100%;
+}
+.regform table tr{
+	height: 78px;
+}
+.regform .inputstyle{
+	border: 1px solid #e2e8f2;
+	background-color: #f1f5f9;
+	/*width: 537px;*/
+	width: 94.2%;
+}
+.regform .inputstyle.fullwid{
+	width: 100%;
+}
+.regform .inputstyle.date{
+	background: url(../img/icon_date.png) right center no-repeat;
+	background-color: #f1f5f9;
+}
+.regform .inputstyle.upload{
+	background: url(../img/icon_upload.png) right center no-repeat;
+	background-color: #f1f5f9;
+}
+.regform  label.tit{
+	min-width: 190px;
+	/*width: 33.9%;*/
+	height: 41px;
+	line-height: 41px;
+	display: inline-block;
+	text-align: center;
+	font-size: 16px;
+	color: #4c6279;
+	vertical-align: middle;
+}
+.regform  label.checkbox{
+	font-size: 16px;
+	color: #4c6279;
+	vertical-align: middle;
+	cursor: pointer;
+}
+.regform .inputstyle input,
+.regform .inputstyle select{
+	border: 0;
+	height: 41px;
+	line-height: 41px;
+	width: 53%;
+	background: #f1f5f9;
+	vertical-align: middle;
+}
+.regform .inputstyle select{
+	height: auto;
+}
+.regform .inputstyle.unit{
+	width: 100%;
+}
+.regform .inputstyle.unit select{
+	width: 220px;
+}

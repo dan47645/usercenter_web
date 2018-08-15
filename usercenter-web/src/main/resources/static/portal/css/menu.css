@@ -1,0 +1,88 @@
+.accordion {
+   
+ }
+.info{
+	padding: 30px;
+	padding-bottom: 17px;
+	font-size: 16px;
+	color: #c1c8cf;
+	line-height: 35px;
+}
+.info p{
+	width: 100%;
+}
+.info p.name{
+	color: #FFFFFF;
+}
+.info p.date{
+	font-size: 14px;
+}
+.info .exit{
+	display: inline-block;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	width: 160px;
+	height: 21px;
+	line-height: 21px;
+	font-size: 14px;
+	color: #acb5be;
+	background: #2c425a;
+}
+.accordion .link {
+	cursor: pointer;
+	display: block;
+	height: 60px;
+	line-height: 60px;
+	padding-left: 60px;
+	color: #e0e0e0;
+	font-size: 14px;
+	position: relative;
+	-webkit-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+.accordion .link.icon01{
+	background: url(../img/nav01.png) 30px center no-repeat;
+	background-color: #4a6179;
+}
+.accordion .link.icon01.active,
+.accordion .link.icon01:hover{
+	color: #FFFFFF;
+	background: url(../img/nav01_cur.png) 30px center no-repeat;
+	background-color: #3da4db;
+}
+.accordion .link.icon02{
+	background: url(../img/nav02.png) 30px center no-repeat;
+	background-color: #4a6179;
+}
+.accordion .link.icon02.active,
+.accordion .link.icon02:hover{
+	color: #FFFFFF;
+	background: url(../img/nav02_cur.png) 30px center no-repeat;
+	background-color: #3da4db;
+}
+.accordion .link.icon03{
+	background: url(../img/nav03.png) 30px center no-repeat;
+	background-color: #4a6179;
+}
+.accordion .link.icon03.active,
+.accordion .link.icon03:hover{
+	color: #FFFFFF;
+	background: url(../img/nav03_cur.png) 30px center no-repeat;
+	background-color: #3da4db;
+}
+.accordion .link.icon04{
+	background: url(../img/nav04.png) 30px center no-repeat;
+	background-color: #4a6179;
+}
+.accordion .link.icon04.active,
+.accordion .link.icon04:hover{
+	color: #FFFFFF;
+	background: url(../img/nav04_cur.png) 30px center no-repeat;
+	background-color: #3da4db;
+}
+.accordion li:last-child .link {
+	border-bottom: 0;
+}
+

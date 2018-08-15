@@ -1,0 +1,14 @@
+.icon-wid{
+	width:16px;
+	height:16px;
+	margin:2px 10px 0 0;
+	}
+.add{
+	background:url(../img/add.png) no-repeat;
+	}
+.lessen{
+	background:url(../img/lessen.png) no-repeat;
+	}
+.redact{
+	background:url(../img/redact.png) no-repeat;
+	}

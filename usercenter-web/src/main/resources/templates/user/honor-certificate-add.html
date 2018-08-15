@@ -1,0 +1,203 @@
+ <div class="modal-dialog" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel2">添加荣誉</h4>
+            </div>
+            <div class="modal-body">
+            	<form id="form-wizard2" enctype="multipart/form-data" name="form-wizard2" class="form-horizontal">
+	            	<input id="hid" type="hidden" name="id" th:value="${dto.id}"  /> 
+	            	<input id="sid" type="hidden" name="sid" th:value="${sid}"  /> 
+	            	
+	            	<div class="form-group">
+	            		<label class="control-label col-md-3">荣誉称号<span class="muted">*</span></label>
+	            		<div class="col-md-7">
+	            				<input class="form-control"  type="text"  id="name" name="name" th:value="${dto.name}" />
+	            		</div>
+	            	</div>
+	           		<div class="form-group">
+						<label class="control-label col-md-3">获得时间<span class="muted">*</span></label>
+						<div class="col-md-7">
+							<input class="Wdate" type="text" id="getTime" name="getTime" th:value="${dto.getTime}" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})"/> 
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="control-label col-md-3">有效期</label>
+						<div class="col-md-7">
+							<input class="Wdate" type="text" id="validity" name="validity" th:value="${dto.validity}" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM'})"/>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="control-label col-md-3">上传证明</label>
+						<div class="col-md-7">
+							<!-- <input type="file" style="height: 37px;" name="otherFileUpload" id="otherFileUpload" multiple="multiple" class="file" /> 
+							<input class="form-control" type="hidden" id="filePath" name="filePath" th:value="${dto.filePath}" />
+							<a class="btn btn-info" onclick="donwFileFun($('#filePath'));">下载</a> -->
+							<input id="ryuploadfile" type="file" name="file" />
+							<div class="input-append">
+								<input class="input-large" style="width: 240px; height: 37px;" readonly="readonly" type="hidden" id="filePath" name="filePath" th:value="${dto.filePath}" /> 
+								<a onclick="donwFileFun($('#filePath'))"><span id="ryuploadspan" th:text="${dto.filePath}"></span></a>
+								 <a class="btn btn-info" onclick="fileUpload($('#filePath'),$('#ryuploadfile'),$('#ryuploadspan'))">上传</a>
+								<!-- <a class="btn btn-info" onclick="donwFileFun($('#businessLicence'))">查看文件</a> -->
+								<a class="btn btn-info" onclick="delFileFun($('#filePath'),$('#ryuploadfile'),$('#ryuploadspan'))">删除</a>
+							</div>
+						</div>
+					</div>
+				</form>
+            </div>
+            <div class="modal-footer">
+                	<button id="reset" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button id="saveButton2" type="button" class="btn btn-primary">提交</button>
+					<span id="tip"> </span>
+            </div>
+        </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+
+<script th:inline="javascript">
+	/*<![CDATA[*/
+		
+	        var contextRoot = /*[[@{/}]]*/;
+          	$(function(){
+          		
+          		
+          	    //初始化上传控件
+        	    initFileInput2("otherFileUpload", "/apk_upload", "filePath");
+        	    //初始上传控件  方法
+        	    function initFileInput2(ctrlName, uploadUrl, el) {
+
+        		   var control = $('#' + ctrlName);
+        		   var el = $('#' + el);
+        		   console.log("222-----------" + el.val());
+        		   if (el.val() != "") {
+        			   control.fileinput({
+        					language : 'zh', //设置语言
+        					uploadUrl : "/apk_upload", //上传的地址
+        					allowedFileExtensions : [ 'jpg', 'png', 'bmp', 'jpeg' ],//接收的文件后缀
+        					uploadAsync : true, //默认异步上传a
+        					//initialPreview:{http://localhost:7777/images/ed08346a-f38b-406a-9c2d-78969e44f28f.jpg}
+        					showUpload : true, //是否显示上传按钮
+        					allowedPreviewTypes : [ 'image' ],
+        					allowedFileTypes : [ 'image' ],
+        					//window:true,
+        					showRemove : true, //显示移除按钮
+        					showPreview : false, //是否显示预览
+        					showCaption : true,//是否显示标题
+        					browseClass : "btn btn-primary", //按钮样式     
+        					dropZoneEnabled : false,//是否显示拖拽区域
+        					maxFileCount : 1, //表示允许同时上传的最大文件个数
+        					enctype : 'multipart/form-data',
+        					validateInitialCount : true,
+        					overwriteInitial : false,
+        					initialPreviewAsData : true,
+        					initialPreview : [ "/images/" + el.val() ],
+        					initialPreviewConfig : [ {
+        						caption : el.val(),
+        						size : 329892,
+        						width : "120px",
+        						url : "/images/" + el.val(),
+        						key : 1
+        					} ]
+
+        				});
+        			} else {
+        				control.fileinput({
+        					language : 'zh', //设置语言
+        					uploadUrl : "/apk_upload", //上传的地址
+        					allowedFileExtensions : [ 'jpg', 'png', 'bmp', 'jpeg' ],//接收的文件后缀
+        					uploadAsync : true, //默认异步上传a
+        					//initialPreview:{http://localhost:7777/images/ed08346a-f38b-406a-9c2d-78969e44f28f.jpg}
+        					showUpload : true, //是否显示上传按钮
+        					allowedPreviewTypes : [ 'image' ],
+        					allowedFileTypes : [ 'image' ],
+        					//window:true,
+        					showRemove : true, //显示移除按钮
+        					showPreview : false, //是否显示预览
+        					showCaption : true,//是否显示标题
+        					browseClass : "btn btn-primary", //按钮样式     
+        					dropZoneEnabled : false,//是否显示拖拽区域
+        					maxFileCount : 1, //表示允许同时上传的最大文件个数
+        					enctype : 'multipart/form-data',
+        					validateInitialCount : true,
+        					overwriteInitial : false,
+        					initialPreviewAsData : true
+        				});
+        			}
+        		}
+        		
+        		//异步上传返回结果处理
+        		$("#otherFileUpload").on("fileuploaded",
+        				function(event, data, previewId, index) {
+        					var response = data.response;
+        					//alert(response.filePath);
+        					$("#filePath").val(response.filePath);
+        				});
+        		//上传前
+        		$('#otherFileUpload')
+        				.on(
+        						'filepreupload',
+        						function(event, data, previewId, index) {
+        							var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
+        						});
+          		
+          		//表单验证
+          		$('#form-wizard2').bootstrapValidator({
+						//live: 'disabled',
+						message : 'This value is not valid',
+						feedbackIcons : {
+							valid : 'glyphicon glyphicon-ok',
+							invalid : 'glyphicon glyphicon-remove',
+							validating : 'glyphicon glyphicon-refresh'
+						},
+						fields : {
+							name : {
+					                validators: {
+					                    notEmpty: {
+					                        message: '不能为空！'
+					                    }
+					                }
+					        }
+						}
+					});
+          		
+           		//保存按钮操作
+          		$("#saveButton2").click(function(){
+          			 $('#form-wizard2').data('bootstrapValidator').validate();
+          			 if(!$('#form-wizard2').data('bootstrapValidator').isValid()){  
+          	             return ;  
+          	         } 
+          			//获取选中的值
+                    var json = [{
+                    	'id': $("#hid").val(),
+                    	'sid' : $("#sid").val(),
+          				'name' : $("#name").val(),
+          				'getTime' : $("#getTime").val(),
+          				'validity' : $("#validity").val(),
+          				'filePath' : $("#filePath").val()
+          			}];	
+          			var models = JSON.stringify(json);
+          			//alert("323===" + models);
+          			$.ajax({
+          			    url: contextRoot+'sys/honor-certificate-save.json',
+          			    data:'models='+models,
+          			    type: 'post',
+          			    success: function(data, textStatus, jqXHR) { 
+          			    	if(data.error!=null){
+          			    		alert(data.error);
+          			    	}else{
+          			    		layer.alert("保存成功！");
+          			    		$('#Modal2').modal('hide');								
+          			    		ryTable();
+          			    	}
+          			     },
+          			     error: function(jqXHR, textStatus, errorThrown) {	
+          			    	 
+          			     }
+          			 }); 
+          		});
+          			
+          	});
+	   
+	/*]]>*/	           
+</script>	           

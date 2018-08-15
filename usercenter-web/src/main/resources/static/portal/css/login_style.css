@@ -1,0 +1,126 @@
+.g-hd{
+	opacity: 0.88;
+}
+body{
+	/*transition: all 1s linear;
+	background: url(../img/bg01.jpg) no-repeat;*/
+}
+a{
+	color: #4a6178;
+}
+::-webkit-input-placeholder { /* WebKit browsers */ 
+color: #4a6178; 
+} 
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */ 
+color: #4a6178;
+} 
+::-moz-placeholder { /* Mozilla Firefox 19+ */ 
+color: #4a6178; 
+} 
+:-ms-input-placeholder { /* Internet Explorer 10+ */ 
+color: #4a6178; 
+} 
+.login{
+	width: 391px;
+	height:526px;
+	background: rgba(255,255,255,0.75);
+	position: absolute;
+	right: 0;
+	top: 60px;
+	z-index: 99;
+}
+.login>.wrap{
+	padding: 35px 20px;
+}
+.login .logintips{
+	display: inline-block;
+	font-size: 14px;
+	color: #db403c;
+	padding-bottom:20px ;
+}
+.login .line{
+	padding: 27px 0 22px 0;
+	width: 100%;
+}
+.login-item{
+	margin-bottom: 10px;
+	position: relative;
+}
+.login-item .login-input{
+	display: block;
+	border: 1px solid #ced7e3;
+	/*padding:0 10px;*/
+	text-indent: 1em;
+	height: 45px;
+	line-height: 45px;
+	color: #4a6178;
+	background-color: #e2e9f2;
+}
+.login-item>.icon{
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	background-color: #e2e9f2;
+}
+.login-item .login-verify{
+	vertical-align: middle;
+}
+
+.login-item .login-check,
+.login-item a{
+	font-size: 14px;
+	color: #4a6178;
+}
+
+.btn-login{
+	color: #FFFFFF;
+	text-align: center;
+	display: block;
+	height: 47px;
+	line-height: 47px;
+	font-size: 20px;
+}
+.login .fastlogin{
+	float: left;
+	width: 110px;
+	height: 47px;
+	display: block;
+	margin-right: 7px;
+}
+
+.login .goreg{
+	clear: both;
+	padding-top: 45px;
+	font-size: 14px;
+}
+.login .goreg a{
+	font-size: 14px;
+	color: #3ea7dc;	
+}
+@media \0screen\,screen\9 {/* 只支持IE6、7、8 */
+  .login{
+		width: 391px;
+		height:526px;
+    	background-color:#ffffff;
+    	filter:Alpha(opacity=75);
+		position:absolute;
+		*zoom:1;
+		right: 0;
+		top: 60px;
+		z-index: 99;
+	}
+	.login *{
+    	position: relative;/* 设置子元素为相对定位，可让子元素不继承Alpha值 */
+	}
+}
+
+/* 窗口宽度<1400 */
+@media screen and (max-width:1399px){
+	.login {
+	    height: 485px;
+	    top: 10px;
+	}
+    .login>.wrap{
+		padding:20px;
+	}
+}

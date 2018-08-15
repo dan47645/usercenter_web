@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>企业信息</title>
+<!--针对最新IE的渲染-->
+<meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+<!--手机端显示-->
+<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<script th:src="@{/js/jquery-2.0.3.min.js}" src="js/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8"></script>
+<script th:src="@{/js/bootstrap.js}" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+
+
+<!--日期时间控件  -->
+<link rel="stylesheet" href="js/My97DatePicker/skin/WdatePicker.css" th:href="@{/js/My97DatePicker/skin/WdatePicker.css}" />
+<script th:src="@{/js/My97DatePicker/WdatePicker.js}" type="text/javascript" charset="utf-8"></script>
+<!-- 验证插件 -->
+<link rel="stylesheet" href="css/bootstrapValidator.css" th:href="@{/css/bootstrapValidator.css}" />
+<script th:src="@{/js/bootstrapValidator.js}" type="text/javascript" charset="utf-8"></script>
+<script th:src="@{/js/bootstrapValidator-zh_CN.js}" type="text/javascript" charset="utf-8"></script>
+
+
+<!-- 新加入第三方上传文件插件 -->
+<link rel="stylesheet" href="js/fileinput/fileinput.css" th:href="@{/js/fileinput/fileinput.css}" />
+<script th:src="@{/js/fileinput/fileinput.js}" type="text/javascript" charset="utf-8"></script>
+<script th:src="@{/js/fileinput/zh.js}" type="text/javascript" charset="utf-8"></script>
+
+
+
+<style>
+.file-caption-main:after {
+	content: "";
+	clear: both;
+}
+
+.kv-fileinput-caption {
+	height: 39px;
+	margin-top: 2px;
+}
+
+.icon-visible {
+	background-image: none;
+}
+</style>
+<style>
+.file-input-new, .file-input {
+	float: left;
+	width: 70%;
+	padding-right: 10px;
+}
+
+.only-one {
+	float: left;
+}
+
+.kv-fileinput-caption {
+	height: 34px;
+}
+</style>
+</head>
+<body class="container">
+
+	<div class="modal-dialog " style="width: 800px;">
+		<div class="modal-content" style="background-color: #ffffff">
+			<!-- <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">企业基本信息</h4>
+			</div> -->
+			<div class="modal-body">
+				<form id="form-wizard" name="form-wizard" class="form-horizontal">
+
+					<div class="container-fluid" style="clear: both; border-top: 1px solid #e5e5e5;">
+						<div class="form-group col-lg-12">
+							<label style="font-size: 16px; margin: 10px;">企业基本信息</label>
+						</div>
+						<!-- 隐藏域 用户id-->
+						<input type="hidden" id="userId" th:value="${userId}" readonly="readonly" />
+						<!-- 隐藏域 企业id-->
+						<input type="hidden" id="enterpriseId" name="enterpriseId" th:value="${enterpriseAndServerDto.enterpriseId}" readonly="readonly" />
+						<div class="form-group">
+							<label class="col-sm-2 control-label">企业名称</label>
+							<div class="col-sm-4">
+								<input class="form-control" type="text" name="enterpriseName" th:value="${enterpriseAndServerDto.enterpriseName}" />
+							</div>
+
+							<label class="col-sm-2 control-label">社会统一信用代码</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="" name="creditCode" th:value="${enterpriseAndServerDto.creditCode}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">注册日期</label>
+							<div class="col-sm-4">
+								<input class="Wdate" type="text" name="registerTime" th:value="${enterpriseAndServerDto.registerTime}" onfocus="WdatePicker({el:this,dateFmt:'yyyy-MM-dd',readOnly:true,onpicked:checkPlanStartTime(this)})" />
+
+							</div>
+
+							<label class="col-sm-2 control-label">法定代表人</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="" name="legalPerson" th:value="${enterpriseAndServerDto.legalPerson}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">注册资金</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="registerCapital" name="registerCapital" th:value="${enterpriseAndServerDto.registerCapital}" />
+							</div>
+
+							<label class="col-sm-2 control-label">单位性质</label>
+							<div class="col-sm-4">
+								<select class="form-control" id="companyTypeId" name="companyType" onchange="companyTypeFun();">
+									<option value="">请选择</option>
+									<option th:each="data:${unitNatures}" th:value="${data.codeCode}" th:selected="${enterpriseAndServerDto.companyType == data.codeCode}" th:text="${data.codeName}"></option>
+								</select> <input class="form-control" type="hidden" id="companyTypeName" name="companyTypeName" th:value="${enterpriseAndServerDto.companyTypeName}" style="width: 70%; display: inline-block" />
+							</div>
+
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">服务类别(一)</label>
+							<div class="col-sm-4">
+								<select class="form-control" id="firstCategory" name="firstCategory" onchange="jumpPage();">
+									<option value="">请选择</option>
+									<option th:each="category:${categorys}" th:value="${category.codeCode}" th:selected="${enterpriseAndServerDto.firstCategory == category.codeCode}" th:text="${category.codeName}"></option>
+								</select>
+							</div>
+
+							<input id="scategory" type="hidden" th:value="${enterpriseAndServerDto.secondCategory}" /> <label class="col-sm-2 control-label">服务类别(二)</label>
+							<div class="col-sm-4">
+								<select class="form-control" id="secondCategory" name="secondCategory">
+
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label">联系人</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="linkMan" name="linkMan" th:value="${enterpriseAndServerDto.linkMan}" />
+							</div>
+
+							<label class="col-sm-2 control-label">手机号码</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="cellPhone" name="cellPhone" th:value="${enterpriseAndServerDto.cellPhone}" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label">办公电话</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="linkPhone" name="linkPhone" th:value="${enterpriseAndServerDto.linkPhone}" />
+							</div>
+
+							<label class="col-sm-2 control-label">电子邮箱</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="email" name="email" th:value="${enterpriseAndServerDto.email}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">传真</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="fax" name="fax" th:value="${enterpriseAndServerDto.fax}" />
+							</div>
+
+							<label class="col-sm-2 control-label">通讯地址</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="postalAddress" name="postalAddress" th:value="${enterpriseAndServerDto.postalAddress}" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label">企业网址</label>
+							<div class="col-sm-4">
+								<input class="form-control" id="webSite" name="webSite" th:value="${enterpriseAndServerDto.webSite}" />
+							</div>
+
+							<label class="col-sm-2 control-label">是否有在线服务系统</label>
+							<div class="col-sm-4">
+								<select id="isServerSys" name="isServerSys" class="form-control" style="width: 50%; display: inline-block">
+									<option value="1" th:selected="${enterpriseAndServerDto.isServerSys == '1'}">是</option>
+									<option value="0" th:selected="${enterpriseAndServerDto.isServerSys == '0'}">否</option>
+								</select> <input class="form-control" id="isServerSysInput" name="isServerSysInput" th:value="${enterpriseAndServerDto.isServerSysInput}" style="width: 70%; display: inline-block" />
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label">是否有固定经营场所</label>
+							<div class="col-sm-4">
+								<select id="isBusinessPlace" name="isBusinessPlace" class="form-control">
+									<option value="1" th:selected="${enterpriseAndServerDto.isBusinessPlace == '1'}">是</option>
+									<option value="0" th:selected="${enterpriseAndServerDto.isBusinessPlace == '0'}">否</option>
+								</select>
+							</div>
+
+							<label class="col-sm-2 control-label">服务场地总面积（平方米）</label>
+							<div class="col-sm-4">
+
+								<input class="form-control" id="serverPlaceArea" name="serverPlaceArea" th:value="${enterpriseAndServerDto.serverPlaceArea}" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">从业人员总数</label>
+							<div class="col-sm-10">
+								<input class="form-control" id="employees" name="employees" th:value="${enterpriseAndServerDto.employees}" width="70%" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">营业执照</label>
+							<div class="col-sm-10">
+								<input id="businessLicencefile" type="file" name="file" accept=".xls,.xlsx" />
+								<div class="input-append">
+									<input class="input-large" style="width: 240px; height: 37px;" readonly="readonly" type="hidden" id="businessLicence" name="businessLicence" th:value="${enterpriseAndServerDto.businessLicence}" />
+									 <a onclick="donwFileFun($('#businessLicence'))"><span id="businessLicencespan" th:text="${enterpriseAndServerDto.businessLicence}"></span></a> 
+									 <a class="btn btn-info" onclick="fileUpload($('#businessLicence'),$('#businessLicencefile'),$('#businessLicencespan'))">上传</a>
+									<!-- <a class="btn btn-info" onclick="donwFileFun($('#businessLicence'))">查看文件</a> -->
+									<a class="btn btn-info" onclick="delFileFun($('#businessLicence'),$('#businessLicencefile'),$('#businessLicencespan'))">删除</a>
+								</div>
+							</div>
+
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">办公场所的产权证明或租用合同</label>
+							<div class="col-sm-10">
+								<input id="contractAttachmentfile" type="file" name="file" />
+								<div class="input-append">
+									<input class="input-large" style="width: 240px; height: 37px;" readonly="readonly" type="hidden" id="contractAttachment" name="contractAttachment" th:value="${enterpriseAndServerDto.contractAttachment}" width="30%" />
+									<a onclick="donwFileFun($('#contractAttachment'))"><span id="contractAttachmentSpan" th:text="${enterpriseAndServerDto.contractAttachment}"></span></a> 
+									<a class="btn btn-info" onclick="fileUpload($('#contractAttachment'),$('#contractAttachmentfile'),$('#contractAttachmentSpan'))">上传</a>
+									<!-- <a class="btn btn-info" onclick="donwFileFun($('#contractAttachment'))">查看文件</a> -->
+									<a class="btn btn-info" onclick="delFileFun($('#contractAttachment'),$('#contractAttachmentfile'),$('#contractAttachmentSpan'))">删除</a>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">其他附件</label>
+							<div class="col-sm-10">
+
+								<input id="otherAttachmentfile" type="file" name="file" />
+								<div class="input-append">
+									<input class="input-large" style="width: 240px; height: 37px;" readonly="readonly" type="hidden" id="otherAttachment" name="otherAttachment" th:value="${enterpriseAndServerDto.otherAttachment}" width="30%" /> 
+									<a onclick="donwFileFun($('#otherAttachment'))"><span id="otherAttachmentSpan" th:text="${enterpriseAndServerDto.otherAttachment}"></span></a>
+									 <a class="btn btn-info" onclick="fileUpload($('#otherAttachment'),$('#otherAttachmentfile'),$('#otherAttachmentSpan'))">上传</a>
+									<!-- <a class="btn btn-info" onclick="donwFileFun($('#otherAttachment'))">查看文件</a> -->
+									<a class="btn btn-info" onclick="delFileFun($('#otherAttachment'),$('#otherAttachmentfile'),$('#otherAttachmentSpan'))">删除</a>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button id="enterpriseSaveButton" type="button" class="btn btn-primary">提交</button>
+				<!-- <button id="reset" type="button" class="btn btn-default" data-dismiss="modal">关闭</button> -->
+				<button id="reset" onclick="javascript:window.close();" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+
+				<span id="tip"> </span>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	/*<![CDATA[*/
+
+	function delFileFun($el, $file,$span) {
+		$el.val("");
+		$file.val("");
+		$span.text("");
+	}
+	function donwFileFun($el) {
+		console.log($el.val());
+		if ($el.val() != "") {
+			var name = $el.val();
+			window.location.href = "/sys/download?fileName=" + name;
+		} else {
+			alert('请上传文件后再下载!!');
+		} 
+	}
+	function fileUpload($el, $file, $span) {
+		var uploadFile = $file[0].files[0];
+		console.log("-----" + uploadFile);
+		if (uploadFile == undefined) {
+			alert('请选择文件,再上传!!!');
+			return;
+		} else {
+			var formData = new FormData();
+			formData.append('file', uploadFile);
+			console.log(uploadFile);
+			$.ajax({
+				url : '/enp/uploadFile',
+				type : 'POST',
+				data : formData,
+				async : false,
+				cache : false,
+				contentType : false,
+				processData : false,
+				success : function(returndata) {
+					alert('上传成功');
+					$el.val(returndata);
+					$span.text(returndata);
+
+				},
+				error : function(returndata) {
+					alert('上传失败！');
+				}
+			});
+		}
+	}
+	/*]]>*/
+</script>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+
+		function checkPlanStartTime(obj) {
+			if (obj.value != null && obj.value != "" && obj.value != undefined) {
+				$("#form-wizard").data("bootstrapValidator").updateStatus(
+						"registerTime", "NOT_VALIDATED", null).validateField(
+						"registerTime");
+			}
+		}
+		
+
+		$(function() {
+			jumpPage();
+			
+		});
+		function companyTypeFun() {
+			var txt = $("#companyTypeId").find("option:selected").text();//选中的文本
+			$('#companyTypeName').val(txt);
+		}
+		//服务级别  级联 
+		function jumpPage() {
+			var fcategory = $("#firstCategory").val();
+			var scategory = $("#scategory").val();
+			$
+					.ajax({
+						url : "/sys/s-org-fcategory-check.json?codeCode="
+								+ fcategory,
+						type : 'post',
+						data : '',
+						dataType : "json",
+						success : function(data, textStatus, jqXHR) {
+							var items = data;
+							var selectModel = $("#secondCategory");
+							selectModel.empty();
+							selectModel
+									.append("<option value=''>-请选择-</option>");
+							if (items != null) {
+								for ( var i in items) {
+									var item = items[i];
+									if (scategory == item.codeCode) {
+										selectModel
+												.append("<option value = '"+item.codeCode+"' selected=\"true\" >"
+														+ item.codeName
+														+ "</option>");
+									} else {
+										selectModel
+												.append("<option value = '"+item.codeCode+"'>"
+														+ item.codeName
+														+ "</option>");
+									}
+								}
+							} else {
+								selectModel.empty();
+							}
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+						}
+					});
+
+		}
+
+		/*]]>*/
+	</script>
+	<script>
+		/*<![CDATA[*/
+		//定义serializeObject方法，序列化表单  
+		$.fn.serializeObject = function() {
+			var o = {};
+			var a = this.serializeArray();
+			$.each(a, function() {
+				if (o[this.name]) {
+					if (!o[this.name].push) {
+						o[this.name] = [ o[this.name] ];
+					}
+					o[this.name].push(this.value || '');
+				} else {
+					o[this.name] = this.value || '';
+				}
+			});
+			return o;
+		};
+		$(function() {
+
+			$('#form-wizard').bootstrapValidator({
+				//		        live: 'disabled',
+				message : 'This value is not valid',
+				feedbackIcons : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
+				},
+				fields : {
+					enterpriseName : {
+						validators : {
+							notEmpty : {
+								message : '企业名称必填!'
+							}
+						/*,
+						 remote : {
+							message : '企业名称名已经存在',
+							url : '/enp/checknewenterprise',
+							data : { //传参数
+								enterpriseName : function() {
+									return $("#enterpriseName").val();
+								}, //username参数名，不用引号，如果想传入特定控件的值一定加入function,这样才能把值传入，不知道为什么……
+								enterpriseId : function() {
+									return $("#enterpriseId").val();
+								}
+							},
+							delay : 1000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+							type : 'POST'//请求方式
+						} */
+						}
+					},
+					creditCode : {
+						validators : {
+							notEmpty : {
+								message : '社会统一信用代码必填!'
+							}
+						}
+					},
+					registerTime : {
+						validators : {
+							notEmpty : {
+								message : '注册日期必填!'
+							}
+						}
+					},
+					legalPerson : {
+						validators : {
+							notEmpty : {
+								message : '法人代表必填!'
+							}
+						}
+					},
+					webSite : {
+						validators : {
+
+							uri : {
+								message : '格式不对(http://www.baidu.com)'
+							}
+						}
+					},
+					registerCapital : {
+						validators : {
+							notEmpty : {
+								message : '注册资金为必填!'
+							},
+							numeric : {
+								message : '注册资金为数值'
+							},
+							callback : {
+								message : '注册资金格式有误(小数点前最多10位，小数点后最多4位)',
+								callback : function(value, validator) {
+
+									var reg = /^[+]?\d{1,10}(?:\.\d{1,4})?$/;
+									//var ress = /\./;
+									var val = $('#registerCapital').val();
+									//console.log(reg.test(val));
+									if (reg.test(val)) {
+										return true;
+									}
+									return false;
+								}
+							}
+
+						}
+					},
+					companyType : {
+						validators : {
+							notEmpty : {
+								message : '单位性质为必填!'
+							}
+
+						}
+					},
+					serverPlaceArea : {
+						validators : {
+							numeric : {
+								message : '服务场地总面积（平方米）为数值!'
+							},
+							callback : {
+								message : '服务场地总面积格式有误(小数点前最多10位，小数点后最多4位)',
+								callback : function(value, validator) {
+
+									var reg = /^[+]?\d{1,10}(?:\.\d{1,4})?$/;
+									//var ress = /\./;
+									var val = $('#serverPlaceArea').val();
+									//console.log(reg.test(val));
+									if (reg.test(val)) {
+										return true;
+									}
+									return false;
+								}
+							}
+
+						}
+					},
+					employees : {
+						validators : {
+
+							digits : {
+								message : '从业人员总数只能为正整数!!'
+							}
+						}
+					},
+					cellPhone : {
+						validators : {
+
+							regexp : {
+								regexp : "^([0-9]{11})?$",
+								message : '手机号码格式错误!'
+							}
+
+						}
+					},
+					email : {
+						validators : {
+
+							emailAddress : {
+								message : '请输入正确的邮件地址如123@qq.com!'
+							}
+						}
+					}
+
+				}
+			});
+		});
+
+		//初始化上传控件
+		initFileInput("uploadfile", "/apk_upload", "businessLicence");
+		initFileInput("contractUploadfile", "/apk_upload", "contractAttachment");
+		initFileInput("otherUploadfile", "/apk_upload", "otherAttachment");
+		//初始上传控件  方法
+		function initFileInput(ctrlName, uploadUrl, el) {
+			console.log("初始化组件方法--" + "上传组件--" + ctrlName + "上传路径--"
+					+ uploadUrl + "返回值--" + el);
+			var control = $('#' + ctrlName);
+			var el = $('#' + el);
+
+			if (el.val() != "") {
+				control.fileinput({
+					language : 'zh', //设置语言
+					uploadUrl : "/apk_upload", //上传的地址
+					allowedFileExtensions : [ 'rar', 'zip', 'pdf', 'xls',
+							'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'jpg', 'png',
+							'bmp', 'jpeg' ],//接收的文件后缀 
+					uploadAsync : true, //默认异步上传a
+					//initialPreview:{http://localhost:7777/images/ed08346a-f38b-406a-9c2d-78969e44f28f.jpg}
+					showUpload : true, //是否显示上传按钮
+					allowedPreviewTypes : [ 'image', 'html', 'video', 'audio',
+							'flash', 'pdf', 'object' ],
+					/* allowedFileTypes : [ 'image', 'html',  'video', 'audio', 'flash', 'pdf', 'object' ],  */
+					//window:true,
+					maxFileSize : 500000,
+					showRemove : true, //显示移除按钮
+					showPreview : false, //是否显示预览
+					showCaption : true,//是否显示标题
+					browseClass : "btn btn-primary", //按钮样式     
+					dropZoneEnabled : false,//是否显示拖拽区域
+					maxFileCount : 1, //表示允许同时上传的最大文件个数
+					enctype : 'multipart/form-data',
+					validateInitialCount : true,
+					overwriteInitial : false,
+					initialPreviewAsData : true,
+					initialPreview : [ "/images/" + el.val() ],
+					initialPreviewConfig : [ {
+						caption : el.val(),
+						size : 329892,
+						width : "120px",
+						url : "/images/" + el.val(),
+						key : 1
+					} ]
+
+				});
+			} else {
+				control.fileinput({
+					language : 'zh', //设置语言
+					uploadUrl : "/apk_upload", //上传的地址
+					allowedFileExtensions : [ 'rar', 'zip', 'pdf', 'xls',
+							'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'jpg', 'png',
+							'bmp', 'jpeg' ],//接收的文件后缀 */
+					uploadAsync : true, //默认异步上传a
+					//initialPreview:{http://localhost:7777/images/ed08346a-f38b-406a-9c2d-78969e44f28f.jpg}
+					showUpload : true, //是否显示上传按钮
+					allowedPreviewTypes : [ 'image', 'html', 'video', 'audio',
+							'flash', 'pdf', 'object' ],
+					/* allowedFileTypes : [ 'gif', 'jpg', 'png', 'bmp' ], */
+					//window:true,
+					maxFileSize : 500000,
+					showRemove : true, //显示移除按钮
+					showPreview : false, //是否显示预览
+					showCaption : true,//是否显示标题
+					browseClass : "btn btn-primary", //按钮样式     
+					dropZoneEnabled : false,//是否显示拖拽区域
+					maxFileCount : 1, //表示允许同时上传的最大文件个数
+					enctype : 'multipart/form-data',
+					validateInitialCount : true,
+					overwriteInitial : false,
+					initialPreviewAsData : true
+				});
+			}
+		};
+
+		//提交按钮,所有验证通过方可提交
+		$("#enterpriseSaveButton").click(function() {
+			var serverPlaceArea=$('#serverPlaceArea').val();
+			if(serverPlaceArea==""){
+				//给个默认值
+		        $('#serverPlaceArea').val(0);
+			}
+					//$('#form-wizard').data('bootstrapValidator').updateStatus('filedname', 'NOT_VALIDATED',null)
+					$('#form-wizard').data('bootstrapValidator')
+							.enableFieldValidators('enterpriseName', true);
+					var flag = $('#form-wizard').bootstrapValidator('validate')
+							.data('bootstrapValidator').isValid();
+					if (flag) {
+						var str = $('#form-wizard').serializeObject();
+						$.post("/enp/enterprise-info-save.json", {
+							models : JSON.stringify(str),
+							userId : $("#userId").val()
+						}, function(result) {
+							console.log(result);
+							var resultObj = result;
+							if (resultObj.success) {
+								alert("保存成功！");
+								setTimeout("window.history.go(-1)", 2000);
+								//$('#Modal').modal('hide');
+								//doQuery();
+							} else {
+								alert("保存失败!");
+							}
+						})
+					}
+				});
+
+		/*营业执照 */
+
+		//异步上传返回结果处理
+		$("#uploadfile").on("fileuploaded",
+				function(event, data, previewId, index) {
+					var response = data.response;
+					//alert(response.filePath);
+					$("#businessLicence").val(response.filePath);
+				});
+		//上传前
+		$('#uploadfile')
+				.on(
+						'filepreupload',
+						function(event, data, previewId, index) {
+							var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
+						});
+		/*  合同*/
+		//异步上传返回结果处理
+		$("#contractUploadfile").on("fileuploaded",
+				function(event, data, previewId, index) {
+					var response = data.response;
+					//alert(response.filePath);
+					$("#contractAttachment").val(response.filePath);
+				});
+		//上传前
+		$('#contractUploadfile')
+				.on(
+						'filepreupload',
+						function(event, data, previewId, index) {
+							var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
+						});
+		/* 其他附件 */
+		//异步上传返回结果处理
+		$("#otherUploadfile").on("fileuploaded",
+				function(event, data, previewId, index) {
+					var response = data.response;
+					//alert(response.filePath);
+					$("#otherAttachment").val(response.filePath);
+				});
+		//上传前
+		$('#otherUploadfile')
+				.on(
+						'filepreupload',
+						function(event, data, previewId, index) {
+							var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
+						});
+
+		//});
+		/*]]>*/
+	</script>
+</body>
+</html>
