@@ -24,6 +24,7 @@ import cn.com.taiji.entity.UserDto;
 import cn.com.taiji.repository.ApplicationRepository;
 import cn.com.taiji.repository.UserRepository;
 import cn.com.taiji.service.UserService;
+import cn.com.taiji.util.UserNameRepeatException;
 
 
 @Service
@@ -47,9 +48,29 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User save(User user) {
+    	//查询用户名是否重复
+    	if(findByName(user.getLoginName())){
+    		throw new UserNameRepeatException("注册名称"+user.getLoginName()+"重复");
+    	}
     	User u=userRepository.saveAndFlush(user);
     	return u;
     }
+    
+	/**
+	 * 根据用户名查询，用于前台验证输入的登录名成是否重复
+	 * 
+	 * @param
+	 * @return
+	 */
+	public boolean findByName(String loginName) {
+		if (loginName != null && loginName.length() > 0) {
+			User users = this.userRepository.findByLoginName(loginName);
+			if (null != users) {
+				return true;
+			}
+		}
+		return false;
+	}
 
     @Override
     public void edit(User user) {

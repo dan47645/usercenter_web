@@ -35,6 +35,7 @@ import cn.com.taiji.service.AppUserRelService;
 import cn.com.taiji.service.ApplicationService;
 import cn.com.taiji.service.UserService;
 import cn.com.taiji.util.Json;
+import cn.com.taiji.util.UserNameRepeatException;
 
 
 @Controller
@@ -181,7 +182,11 @@ public class UserController {
 			json.setSuccess(true);
 			json.setMsg("注册成功!");
 			
-		} catch (Exception e) {
+		} catch (UserNameRepeatException e){
+			e.printStackTrace();
+			json.setSuccess(false);
+			json.setMsg("用户名重复!");
+		}catch (Exception e) {
 			e.printStackTrace();
 			json.setSuccess(false);
 			json.setMsg("注册失败!");
