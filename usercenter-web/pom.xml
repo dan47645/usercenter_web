@@ -76,7 +76,18 @@
 			<artifactId>ojdbc6</artifactId>
 			<version>10.2.0.3</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpcore</artifactId>
+		    <version>4.4.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
 	</dependencies>
+	
+	
 
 	<build>
 		<plugins>

@@ -86,10 +86,20 @@ public class EnterpriseAndServerOrgInfoDto extends QueryBase implements Serializ
 	private String establishment;
 	//服务简介------机构简介
 	private String sAbstract;
+	// 版权号
+	private String publishNum;
 	//特色服务产品介绍
 	private String sCompant;
 	private Integer delFlag=1;
 	private Integer flag;
+	
+	
+	public String getPublishNum() {
+		return publishNum;
+	}
+	public void setPublishNum(String publishNum) {
+		this.publishNum = publishNum;
+	}
 	public String getEnterpriseId() {
 		return enterpriseId;
 	}

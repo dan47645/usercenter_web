@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>北京市中小企业公共服务平台用户注册</title>
+<!--针对最新IE的渲染-->
+<meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+<!--手机端显示-->
+<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+<script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/bootstrapValidator.js"></script>
+<script type="text/javascript" src="js/bootstrapValidator-zh_CN.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a href="#" class="navbar-brand" style="font-weight: bold;">北京市中小企业公共服务平台</a>
+			</div>
+		</div>
+	</nav>
+	<div class="modal fade" id="Modal" tabindex="1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+	<div class="container" style="padding-top: 100px;">
+		<div class="panel panel-info">
+			<div class="panel-heading">忘记密码</div>
+			<!-- <form class="form-horizontal" th:action="@{/add}" method="post"> -->
+			<form id="defaultForm" role="form"  class="form-signin" method="post" th:action="@{/changePwd}">
+				<div class="panel-body">
+				<input type="hidden" name="loginName" th:value="${loginName}"/>
+				<input type="hidden" name="random" th:value="${random}" />
+					<div class="form-group">
+						<label for="password">密码</label>
+						<div>
+							<input type="password" class="form-control" name="password" id="password" placeholder="请输入密码" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="password">确认密码</label>
+						<div>
+							<input type="password" class="form-control" name="repassword" id="repassword" placeholder="请再次输入密码" />
+						</div>
+					</div>
+				</div>
+				<div class="panel-footer" style="text-align: center">
+					<input id="btnRegisterId" type="submit" class="btn btn-info" value="提交" />
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<script>
+		$(function() {/* 文档加载，执行一个函数*/
+			$('#defaultForm')
+					.bootstrapValidator(
+							{
+						message : 'This value is not valid',
+						feedbackIcons : {/*input状态样式图片*/
+							valid : 'glyphicon glyphicon-ok',
+							invalid : 'glyphicon glyphicon-remove',
+							validating : 'glyphicon glyphicon-refresh'
+						},
+						fields : {/*验证：规则*/
+							password : {
+								message : '密码无效',
+								validators : {
+									notEmpty : {
+										message : '密码不能为空'
+									},
+									stringLength : {
+										min : 6,
+										max : 30,
+										message : '用户名长度必须在6到30之间'
+									},
+									identical : {//相同
+										field : 'password', //需要进行比较的input name值
+										message : '两次密码不一致'
+									},
+									different : {//不能和用户名相同
+										field : 'username',//需要进行比较的input name值
+										message : '不能和用户名相同'
+									},
+									regexp : {
+										regexp : /^[a-zA-Z0-9_\.]+$/,
+										message : 'The username can only consist of alphabetical, number, dot and underscore'
+									}
+								}
+							},
+							repassword : {
+								message : '确认密码无效',
+								validators : {
+									notEmpty : {
+										message : '用户名不能为空'
+									},
+									stringLength : {
+										min : 6,
+										max : 30,
+										message : '用户名长度必须在6到30之间'
+									},
+									identical : {//相同
+										field : 'password',
+										message : '两次密码不一致'
+									},
+									different : {//不能和用户名相同
+										field : 'username',
+										message : '不能和用户名相同'
+									},
+									regexp : {//匹配规则
+										regexp : /^[a-zA-Z0-9_\.]+$/,
+										message : 'The username can only consist of alphabetical, number, dot and underscore'
+									}
+								}
+							}
+						}
+					});
+		});
+	</script>
+</body>
+</html>

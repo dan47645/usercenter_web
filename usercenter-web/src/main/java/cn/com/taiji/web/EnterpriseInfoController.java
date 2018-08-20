@@ -144,6 +144,13 @@ public class EnterpriseInfoController {
 		enterpriseAndServerOrgInfoDto.setContractAttachment(eInfo.getContractAttachment());
 		// 其他附件
 		enterpriseAndServerOrgInfoDto.setOtherAttachment(eInfo.getOtherAttachment());
+		//版本号
+		String publishNum = enterpriseAndServerOrgInfoDto.getPublishNum();
+		if (!"".equals(publishNum) && publishNum != null) {
+			enterpriseAndServerOrgInfoDto.setPublishNum(publishNum);
+		} else {
+			enterpriseAndServerOrgInfoDto.setPublishNum("V110" + cn.com.taiji.util.OrgCodeUtil.createID());
+		}
 		
 		providerData(model);
 		//企业基本信息

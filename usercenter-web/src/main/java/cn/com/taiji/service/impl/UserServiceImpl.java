@@ -48,10 +48,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User save(User user) {
-    	//查询用户名是否重复
-    	if(findByName(user.getLoginName())){
-    		throw new UserNameRepeatException("注册名称"+user.getLoginName()+"重复");
-    	}
+    	
     	User u=userRepository.saveAndFlush(user);
     	return u;
     }

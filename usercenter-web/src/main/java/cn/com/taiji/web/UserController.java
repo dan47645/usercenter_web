@@ -1,15 +1,25 @@
 package cn.com.taiji.web;
 
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.com.taiji.entity.AppUserRel;
@@ -134,8 +145,12 @@ public class UserController {
 		user.setPuname("4");//个人用户
 		user.setOperateId(11);//新增操作
 		user.setDocumentType("t01");//默认为身份证类型
-		
 		try {
+			User usr = userService.findByLoginName(user.getLoginName());
+			if(usr!=null){
+				//查询用户名是否重复
+		    	throw new UserNameRepeatException("注册名称"+user.getLoginName()+"重复");
+			}
 			User u = userService.save(user);
 			//同步用户
 			ResponseEntity<String> s = restTemplate.postForEntity(url, u, String.class); 
@@ -351,6 +366,161 @@ public class UserController {
 			log.error(e.getMessage());
 			e.printStackTrace();
 		}
+		return jsobjcet;
+	}
+	
+	/**
+	 * 
+	 * @Title: toForgetPassword 
+	 * @Description: 跳转到忘记密码页面 
+	 * @param @param loginName
+	 * @param @return    设定文件 
+	 * @return String    返回类型 
+	 * @date 2018年8月17日 上午9:54:34
+	 * @author Luo
+	 * @throws
+	 */
+	@RequestMapping("/forgetPwd")
+	public String toForgetPassword() {
+			//忘记密码
+			return "user/forgetPwd";
+	}
+	/**
+	 * 
+	 * @Title: getValidata 
+	 * @Description: 获取验证码 
+	 * @param @param loginName
+	 * @param @return    设定文件 
+	 * @return String    返回类型 
+	 * @date 2018年8月17日 下午2:52:46
+	 * @author Luo
+	 * @throws
+	 */
+	@RequestMapping("/getValidata")
+	public String getValidata(Model model,@RequestParam("loginName") String loginName) {
+			//忘记密码
+			User user = userService.findByLoginName(loginName);
+			StringBuilder phoneNum = new StringBuilder(user.getPhoneNum());
+			model.addAttribute("phoneNum", phoneNum.toString());
+			model.addAttribute("phoneNumHide", phoneNum.replace(3, 8, "*****").toString());
+			model.addAttribute("loginName", user.getLoginName());
+			return "user/msgValidata";
+	}
+	
+	@RequestMapping("/toChangePwd")
+	public String toChangePwd(Model model,@RequestParam("loginName") String loginName,
+			@RequestParam("random") String random) {
+			//忘记密码
+			model.addAttribute("loginName", loginName);
+			model.addAttribute("random", random);
+			return "user/changePwd";
+	}
+	
+	/**
+	 * 
+	 * @Title: changePwd 
+	 * @Description: 忘记密码-修改密码成功 
+	 * @param @param model
+	 * @param @param id
+	 * @param @param newpass
+	 * @param @return
+	 * @param @throws Exception    设定文件 
+	 * @return String    返回类型 
+	 * @date 2018年8月17日 下午5:56:18
+	 * @author Luo
+	 * @throws
+	 */
+	@RequestMapping(value = "/changePwd", method = RequestMethod.POST)
+	public String changePwd(Model model, String loginName, String password,@RequestParam("random") String random) throws Exception {
+		if(null == random || "".equals(random)){
+			throw new RuntimeException("非法操作,请按照顺序进行操作!");
+		}
+		User user = userService.findByLoginName(loginName);
+		user.setPassword(password);
+		user.setOperateId(12);//修改操作
+		userService.save(user);
+		//调用同步接口
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, user, String.class);
+
+		String v = responseEntity.getBody();
+		System.out.println("---------------返回同步结果start--------------------"+v);
+		return "user/result";
+	}
+	
+	/**校验用户名是否可用
+	 * @author lyp
+	 * @param loginName
+	 * @return
+	 */
+	@RequestMapping(value = "/sys/checkLoginName", method = { RequestMethod.POST })
+	@ResponseBody
+	public JSONObject checkLoginName(@RequestParam("loginName") String loginName) {
+		
+		JSONObject jsobjcet = new JSONObject();
+		Boolean ret = false;// 默认为验证不通过
+		try {
+			loginName = URLDecoder.decode(loginName,"UTF-8");
+			loginName=loginName.trim();
+			User user=userService.findByLoginName(loginName);
+			if(user!=null){
+				ret=true;
+			}else {
+				ret=false;
+			}
+			jsobjcet.put("valid", ret);
+			
+		} catch (Exception e) {
+			
+			log.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return jsobjcet;
+	}
+	
+	/**
+	 * 
+	 * @Title: sendValidata 
+	 * @Description: 发送验证码 
+	 * @param @param model
+	 * @param @param loginName
+	 * @param @return    设定文件 
+	 * @return String    返回类型 
+	 * @date 2018年8月17日 下午4:31:33
+	 * @author Luo
+	 * @throws
+	 */
+	@RequestMapping("/sendValidata")
+	@ResponseBody
+	public JSONObject sendValidata(Model model) {
+			//忘记密码
+		String result = "";
+		Map<String,Object> map = new HashMap<String,Object>();
+		int random = (int)((Math.random()*9+1)*1000);
+//		map.put("phone",phoneNum);
+//		map.put("content",random);
+//		map.put("key","12345678");
+//		map.put("sign","e71fc6e0f089b75a5ef705d7039959d9");
+//		map.put("modelId","392");
+//		HttpPost httpRequst = new HttpPost("http://43.254.24.37/sms");//创建HttpPost对象
+//		httpRequst.setHeader("Content-type","application/json; charset=utf-8");
+//		try {
+//		   httpRequst.setEntity(new StringEntity(JSON.toJSONString(map), Charset.forName("UTF-8")));
+//		   HttpResponse httpResponse = new DefaultHttpClient().execute(httpRequst);
+//		   if(httpResponse.getStatusLine().getStatusCode() == 200)
+//		   {
+//		      HttpEntity httpEntity = httpResponse.getEntity();
+//		      result = EntityUtils.toString(httpEntity);//取出应答字符串
+//		   }
+			JSONObject jsobjcet = new JSONObject();
+			jsobjcet.put("info", random);
+		
+		
+//		} catch (Exception e) {
+			//jsobjcet.put("info", "error");
+//		   e.printStackTrace();
+//		   result = e.getMessage().toString();
+//		}
+		System.out.println("随机的验证码为："+random);
 		return jsobjcet;
 	}
 }
