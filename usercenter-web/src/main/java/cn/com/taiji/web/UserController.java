@@ -146,11 +146,6 @@ public class UserController {
 		user.setOperateId(11);//新增操作
 		user.setDocumentType("t01");//默认为身份证类型
 		try {
-			User usr = userService.findByLoginName(user.getLoginName());
-			if(usr!=null){
-				//查询用户名是否重复
-		    	throw new UserNameRepeatException("注册名称"+user.getLoginName()+"重复");
-			}
 			User u = userService.save(user);
 			//同步用户
 			ResponseEntity<String> s = restTemplate.postForEntity(url, u, String.class); 
@@ -191,16 +186,9 @@ public class UserController {
 				 cocoCodes, userId);
 				 log.info("------第三步调用同步用户字段返回值------" + sss);
 			}
-			
-			
-			
 			json.setSuccess(true);
 			json.setMsg("注册成功!");
 			
-		} catch (UserNameRepeatException e){
-			e.printStackTrace();
-			json.setSuccess(false);
-			json.setMsg("用户名重复!");
 		}catch (Exception e) {
 			e.printStackTrace();
 			json.setSuccess(false);

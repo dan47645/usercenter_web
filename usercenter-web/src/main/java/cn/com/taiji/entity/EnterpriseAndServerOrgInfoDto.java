@@ -92,7 +92,10 @@ public class EnterpriseAndServerOrgInfoDto extends QueryBase implements Serializ
 	private String sCompant;
 	private Integer delFlag=1;
 	private Integer flag;
-	
+	//状态(企业or机构)
+	private String state;
+	//是否是当前(0,历史,1,当前)
+	private String isCurrent;
 	
 	public String getPublishNum() {
 		return publishNum;
@@ -310,6 +313,18 @@ public class EnterpriseAndServerOrgInfoDto extends QueryBase implements Serializ
 	}
 	public void setFlag(Integer flag) {
 		this.flag = flag;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public String getIsCurrent() {
+		return isCurrent;
+	}
+	public void setIsCurrent(String isCurrent) {
+		this.isCurrent = isCurrent;
 	}
 
 	

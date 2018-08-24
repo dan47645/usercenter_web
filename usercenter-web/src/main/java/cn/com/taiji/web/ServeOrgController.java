@@ -145,6 +145,11 @@ public class ServeOrgController {
 		// 其他附件
 		enterpriseAndServerDto.setOtherAttachment(enterInfo.getOtherAttachment());
 		
+		// 是否是当前(0,历史,1,当前)
+		enterpriseAndServerDto.setIsCurrent(enterInfo.getIsCurrent());
+		// 版本号
+		enterpriseAndServerDto.setPublishNum(enterInfo.getPublishNum());
+		
 		if (tempServer != null) {
 			enterpriseAndServerDto.setServerOrgId(tempServer.getId().toString());
 			enterpriseAndServerDto.setTotalAsset(tempServer.getTotalAsset());
@@ -305,6 +310,10 @@ public class ServeOrgController {
 				enterpriseInfoDto.setContractAttachment(enterpriseServerDto.getContractAttachment());
 				// 其他附件
 				enterpriseInfoDto.setOtherAttachment(enterpriseServerDto.getOtherAttachment());
+				// 是否是当前(0,历史,1,当前)
+				enterpriseInfoDto.setIsCurrent(enterpriseServerDto.getIsCurrent());
+				// 版本号
+				enterpriseInfoDto.setPublishNum(enterpriseServerDto.getPublishNum());
 				//保存企业信息
 				EnterpriseInfo eInfo= enterpriseInfoService.saveEnpInfo(enterpriseInfoDto);
 				//保存机构
@@ -316,6 +325,7 @@ public class ServeOrgController {
 					 so=new ServerOrg();
 				 }
 				 	so.setEnterpriseId(eInfo.getId());
+				 	so.setEnterpriseName(enterpriseServerDto.getEnterpriseName());
 					so.setId(enterpriseServerDto.getServerOrgId());
 					so.setTotalAsset(enterpriseServerDto.getTotalAsset());
 					so.setTotalNetAsset(enterpriseServerDto.getTotalNetAsset());
@@ -324,6 +334,8 @@ public class ServeOrgController {
 					so.setEstablishment(enterpriseServerDto.getEstablishment());
 					so.setsAbstract(enterpriseServerDto.getsAbstract());
 					so.setsCompant(enterpriseServerDto.getsCompant());
+					so.setPublishNum(enterpriseServerDto.getPublishNum());
+					so.setAuditStatus("0");
 				//保存服务机构	
 				 ServerOrg sos=serveOrgService.save(so);
 				 //保存服务机构和用户中间信息
@@ -340,6 +352,7 @@ public class ServeOrgController {
 				 result.setMsg("保存成功");
 				
 			} catch (Exception e) {
+				e.printStackTrace();
 				log.error("Exception{}:", e.getMessage());
 				model.addAttribute("error", e.getMessage());
 				result.setSuccess(false);

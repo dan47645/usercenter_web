@@ -214,6 +214,10 @@ public class EnterpriseInfo {
 		// 版本号
 		@Column(name = "pulish_num")
 		private String publishNum;
+		
+		//是否是当前(0,历史,1,当前)
+		@Column(name = "is_current")
+		private String isCurrent;
 	public EnterpriseInfo() {
 		super();
 	}
@@ -279,6 +283,14 @@ public class EnterpriseInfo {
 	}
 
 	
+	public String getIsCurrent() {
+		return isCurrent;
+	}
+
+	public void setIsCurrent(String isCurrent) {
+		this.isCurrent = isCurrent;
+	}
+
 	public String getId() {
 		return id;
 	}

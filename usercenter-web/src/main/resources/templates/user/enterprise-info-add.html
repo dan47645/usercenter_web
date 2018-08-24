@@ -286,6 +286,24 @@
 			var formData = new FormData();
 			formData.append('file', uploadFile);
 			console.log(uploadFile);
+			
+			var ext,idx; 
+			var fileName = uploadFile.name;
+			idx = fileName.lastIndexOf(".");
+			if (idx != -1){   
+	            ext = fileName.substr(idx+1).toUpperCase();   
+	            ext = ext.toLowerCase( ); 
+	            if (ext != 'rar' && ext != 'zip' && ext != 'pdf' && ext != 'xls' && ext != 'xlsx' 
+	            		&& ext != 'doc' && ext != 'docx' && ext != 'ppt' && ext != 'pptx' && ext != 'gif' 
+	            		 && ext != 'jpg' && ext != 'png' && ext != 'bmp'){
+	                layer.alert("只能上传.rar  .zip  .pdf  .xls .xlsx .doc .docx .ppt .pptx .gif .jpg .png .bmp类型的文件!"); 
+	                return;  
+	            }   
+	        } else {  
+	          	layer.alert("只能上传.rar  .zip  .pdf  .xls .xlsx .doc .docx .ppt .pptx .gif .jpg .png .bmp类型的文件!"); 
+	            return;
+	        } 
+			
 			$.ajax({
 				url : '/enp/uploadFile',
 				type : 'POST',

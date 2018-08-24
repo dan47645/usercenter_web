@@ -22,7 +22,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "certification")
-public class Certification extends Audited implements Serializable {
+public class Certification extends AuditedOther implements Serializable {
 
 	@Column(name = "name")
 	private String name;// 资质名称

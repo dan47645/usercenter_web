@@ -230,6 +230,29 @@ public class EnterpriseInfoController {
 				enterpriseInfoDto.setOtherAttachment(enterpriseAndServerOrgInfoDto.getOtherAttachment());
 				enterpriseInfoDto.setDelFlag(1);
 				
+				String state = enterpriseAndServerOrgInfoDto.getState();
+				if (!"".equals(state) && state != null) {
+					// 1.企业2.机构
+					enterpriseInfoDto.setState(state);
+				} else {
+					enterpriseInfoDto.setState("1");
+				}
+
+				// 版本号默认V110+企业各汉字首字母+字间镞+随机数
+				/*
+				 * enterpriseInfoDto.setPublishNum( "V110" +
+				 * PinYinUtils.capitalizeLetter(enterpriseAndServerOrgInfoDto.getEnterpriseName(
+				 * )) + OrgCodeUtil.createID());
+				 */
+				String publishNum = enterpriseAndServerOrgInfoDto.getPublishNum();
+				if (!"".equals(publishNum) && publishNum != null) {
+					enterpriseInfoDto.setPublishNum(publishNum);
+				} else {
+					enterpriseInfoDto.setPublishNum("V110" + cn.com.taiji.util.OrgCodeUtil.createID());
+				}
+				// 设为当前
+				enterpriseInfoDto.setIsCurrent("1");
+				
 				
 			} catch (JsonParseException e) {
 				logger.error("JsonParseException{}:", e.getMessage());

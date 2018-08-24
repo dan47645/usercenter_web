@@ -153,7 +153,9 @@ public class EnterpriseInfoNewDto extends QueryBase implements Serializable {
 	private String state;
 	// 版权号
 	private String publishNum;
-
+	//是否是当前(0,历史,1,当前)
+	private String isCurrent;
+	
 	private Integer delFlag=1;
 	private Integer flag;
 	public EnterpriseInfoNewDto() {
@@ -226,6 +228,14 @@ public class EnterpriseInfoNewDto extends QueryBase implements Serializable {
 		this.businessScope = businessScope;
 		this.state = state;
 		this.publishNum = publishNum;
+	}
+
+	public String getIsCurrent() {
+		return isCurrent;
+	}
+
+	public void setIsCurrent(String isCurrent) {
+		this.isCurrent = isCurrent;
 	}
 
 	public String getPublishNum() {

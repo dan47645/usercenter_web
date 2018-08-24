@@ -152,7 +152,7 @@
 						console.log(data);
 						if (data.success) {
 							alert(data.msg);
-							setTimeout("window.history.go(-1)", 2000);
+							//setTimeout("window.history.go(-1)", 2000);
 							/* $("#modifySuccess").css({
 								'display' : 'inline'
 							}); */
@@ -222,6 +222,7 @@
 			<div class="form-group">
 				<label class="col-sm-2 control-label"> </label>
 				<button type="submit" class="btn btn-primary" id="submit" style="text-align: center;">确认修改</button>
+				<button id="reset" onclick="javascript:window.close();" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 			</div>
 		</form>
 	</div>
