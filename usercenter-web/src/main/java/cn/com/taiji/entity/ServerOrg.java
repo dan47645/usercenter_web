@@ -149,6 +149,12 @@ public class ServerOrg extends Audited implements Serializable{
 	public String getsFirstCategory() {
 		return sFirstCategory;
 	}
+	public String getServerOrgTid() {
+		return serverOrgTid;
+	}
+	public void setServerOrgTid(String serverOrgTid) {
+		this.serverOrgTid = serverOrgTid;
+	}
 	public void setsFirstCategory(String sFirstCategory) {
 		this.sFirstCategory = sFirstCategory;
 	}

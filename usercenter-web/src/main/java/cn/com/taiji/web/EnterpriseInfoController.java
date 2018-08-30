@@ -229,6 +229,7 @@ public class EnterpriseInfoController {
 				// 其他附件
 				enterpriseInfoDto.setOtherAttachment(enterpriseAndServerOrgInfoDto.getOtherAttachment());
 				enterpriseInfoDto.setDelFlag(1);
+				enterpriseInfoDto.setFlag(1);
 				
 				String state = enterpriseAndServerOrgInfoDto.getState();
 				if (!"".equals(state) && state != null) {

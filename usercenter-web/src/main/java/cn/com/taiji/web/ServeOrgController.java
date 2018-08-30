@@ -33,6 +33,7 @@ import cn.com.taiji.entity.EnterpriseAndServerOrgInfoDto;
 import cn.com.taiji.entity.EnterpriseInfo;
 import cn.com.taiji.entity.EnterpriseInfoNewDto;
 import cn.com.taiji.entity.EnterpriseInfoUser;
+import cn.com.taiji.entity.EnterpriseInfoUserPK;
 import cn.com.taiji.entity.HonorCertificateDto;
 import cn.com.taiji.entity.ServerOrg;
 import cn.com.taiji.entity.User;
@@ -87,6 +88,7 @@ public class ServeOrgController {
 		ServerOrg tempServer=null;
 		//根据userid 到机构用户查询
 		List<EnterpriseInfoUser> euList=enterpriseInfoService.findByUserId(id);
+
 		if(euList!=null&&!euList.isEmpty()) {
 			//eInfo=new EnterpriseInfo();
 			EnterpriseInfoUser enterpriseInfoUser=euList.get(0);
@@ -110,6 +112,7 @@ public class ServeOrgController {
 		enterpriseAndServerDto.setRegisterCapital(enterInfo.getRegisterCapital());
 		// 单位性质
 		enterpriseAndServerDto.setCompanyType(enterInfo.getCompanyType());
+		enterpriseAndServerDto.setCompanyTypeName(enterInfo.getCompanyTypeName());
 		// 服务类别category（一级）
 		enterpriseAndServerDto.setFirstCategory(enterInfo.getFirstCategory());
 		// 服务类别（二级）
@@ -276,6 +279,7 @@ public class ServeOrgController {
 				enterpriseInfoDto.setRegisterCapital(enterpriseServerDto.getRegisterCapital());
 				// 单位性质
 				enterpriseInfoDto.setCompanyType(enterpriseServerDto.getCompanyType());
+				enterpriseInfoDto.setCompanyTypeName(enterpriseServerDto.getCompanyTypeName());
 				// 服务类别category（一级）
 				enterpriseInfoDto.setFirstCategory(enterpriseServerDto.getFirstCategory());
 				// 服务类别（二级）
@@ -310,12 +314,46 @@ public class ServeOrgController {
 				enterpriseInfoDto.setContractAttachment(enterpriseServerDto.getContractAttachment());
 				// 其他附件
 				enterpriseInfoDto.setOtherAttachment(enterpriseServerDto.getOtherAttachment());
-				// 是否是当前(0,历史,1,当前)
-				enterpriseInfoDto.setIsCurrent(enterpriseServerDto.getIsCurrent());
-				// 版本号
-				enterpriseInfoDto.setPublishNum(enterpriseServerDto.getPublishNum());
+				enterpriseInfoDto.setDelFlag(1);
+				
+				String state = enterpriseServerDto.getState();
+				if (!"".equals(state) && state != null) {
+					// 1.企业2.机构
+					enterpriseInfoDto.setState(state);
+				} else {
+					enterpriseInfoDto.setState("1");
+				}
+				String publishNum = enterpriseServerDto.getPublishNum();
+				if (!"".equals(publishNum) && publishNum != null) {
+					enterpriseInfoDto.setPublishNum(publishNum);
+				} else {
+					String publishNums = "V110" + cn.com.taiji.util.OrgCodeUtil.createID();
+					enterpriseServerDto.setPublishNum(publishNums);
+					enterpriseInfoDto.setPublishNum(publishNums);
+				}
+				// 设为当前
+				enterpriseInfoDto.setIsCurrent("1");
+				
+				
 				//保存企业信息
 				EnterpriseInfo eInfo= enterpriseInfoService.saveEnpInfo(enterpriseInfoDto);
+			
+				//保存企业和用户中间表信息
+				EnterpriseInfoUser eUser=new EnterpriseInfoUser();
+				EnterpriseInfoUserPK userPK=new EnterpriseInfoUserPK();
+				userPK.setUserId(userId);
+				userPK.setEnerpriseInfoId(eInfo.getId());
+				eUser.setId(userPK);
+				enterpriseInfoService.saveEnterpriseInfoUser(eUser);
+				//更新用户表信息-个人用户-转化为-企业用户
+				User user1=userService.findUserById(userId);
+				user1.setPuname("1");//企业用户
+				userService.save(user1);
+				
+				
+				
+				
+				
 				//保存机构
 				 String serverOrgId=enterpriseServerDto.getServerOrgId();
 				 ServerOrg so= new ServerOrg();
@@ -336,6 +374,16 @@ public class ServeOrgController {
 					so.setsCompant(enterpriseServerDto.getsCompant());
 					so.setPublishNum(enterpriseServerDto.getPublishNum());
 					so.setAuditStatus("0");
+					
+					//后添加的属性
+					so.setCreditCode(enterpriseServerDto.getCreditCode());
+					so.setCompanyType(enterpriseServerDto.getCompanyType());
+					so.setFirstCategory(enterpriseServerDto.getFirstCategory());
+					so.setSecondCategory(enterpriseServerDto.getFirstCategory());
+					so.setLinkMan(enterpriseServerDto.getLinkMan());
+					so.setCellPhone(enterpriseServerDto.getCellPhone());
+					
+					
 				//保存服务机构	
 				 ServerOrg sos=serveOrgService.save(so);
 				 //保存服务机构和用户中间信息

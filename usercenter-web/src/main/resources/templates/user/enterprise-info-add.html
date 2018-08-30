@@ -283,6 +283,12 @@
 			alert('请选择文件,再上传!!!');
 			return;
 		} else {
+			//文件大小
+			var fileSize = uploadFile.size/1024/1024;
+			if(fileSize>50){
+				layer.alert("上传文件大小限制50M");
+				return;
+			}
 			var formData = new FormData();
 			formData.append('file', uploadFile);
 			console.log(uploadFile);

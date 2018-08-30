@@ -12,6 +12,7 @@
 <script type="text/javascript" src="js/bootstrap.js"></script>
 <script type="text/javascript" src="js/bootstrapValidator.js"></script>
 <script type="text/javascript" src="js/bootstrapValidator-zh_CN.js"></script>
+<script type="text/javascript" src="js/layer/layer.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-default navbar-fixed-top">
@@ -257,17 +258,21 @@
 			$('#btnRegisterId').click(
 					function() {
 						//关闭提交按钮
-					 	console.log("准备关闭按钮");
-						$('#btnRegisterId').val('正在提交');
-						$('#btnRegisterId').unbind('click'); 
 						
 						var flag = $('#defaultForm').bootstrapValidator(
 								'validate').data('bootstrapValidator')
 								.isValid();
 						
 						 if (flag) {
+							var index = layer.load(1,{shade:[0.4,'black']});
+						 	console.log("准备关闭按钮");
+							$('#btnRegisterId').val('正在提交');
+							$('#btnRegisterId').unbind('click'); 
+							
+							
 							$.post('/userAdd.json', $('#defaultForm')
 									.serialize(), function(result) {
+								layer.close(index);
 								console.log(result);
 								if (result) {
 									alert(result.msg);

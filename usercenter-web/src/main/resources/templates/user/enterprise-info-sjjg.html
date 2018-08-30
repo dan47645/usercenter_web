@@ -119,7 +119,7 @@
 
 							<label class="col-sm-2 control-label">单位性质</label>
 							<div class="col-sm-4">
-								<select class="form-control" name="companyType">
+								<select class="form-control" id="companyTypeId" name="companyType" onchange="companyTypeFun();">
 									<option value="">请选择</option>
 									<option th:each="data:${unitNatures}" th:value="${data.codeCode}" th:selected="${enterpriseAndServerDto.companyType == data.codeCode}" th:text="${data.codeName}"></option>
 								</select>
@@ -355,6 +355,11 @@
 	</div>
 	<script type="text/javascript">
 	/*<![CDATA[*/
+		
+	function companyTypeFun() {
+		var txt = $("#companyTypeId").find("option:selected").text();//选中的文本
+		$('#companyTypeName').val(txt);
+	}
 
 	function delFileFun($el, $file,$span) {
 		$el.val("");
@@ -377,6 +382,12 @@
 			alert('请选择文件,再上传!!!');
 			return;
 		} else {
+			//文件大小
+			var fileSize = uploadFile.size/1024/1024;
+			if(fileSize>50){
+				layer.alert("上传文件大小限制50M");
+				return;
+			}
 			var formData = new FormData();
 			formData.append('file', uploadFile);
 			console.log(uploadFile.name);

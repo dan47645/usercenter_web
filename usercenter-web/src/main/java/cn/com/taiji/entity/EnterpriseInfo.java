@@ -1,15 +1,24 @@
 package cn.com.taiji.entity;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "enterprise_info")
@@ -218,6 +227,13 @@ public class EnterpriseInfo {
 		//是否是当前(0,历史,1,当前)
 		@Column(name = "is_current")
 		private String isCurrent;
+		
+		@CreatedDate
+		protected Calendar createdDate;
+		@LastModifiedDate
+		protected Calendar modifiedDate;
+		
+		
 	public EnterpriseInfo() {
 		super();
 	}
@@ -812,7 +828,45 @@ public class EnterpriseInfo {
 	public void setFlag(Integer flag) {
 		this.flag = flag;
 	}
+
+	public Calendar getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Calendar createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Calendar getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Calendar modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
 	
-	
+	/**
+	 * 
+	 * @Description: 	插入
+	 * @throws
+	 * @author chixue
+	 * @date 2016年5月9日
+	 */
+	    @PrePersist
+		public void createAuditInfo(){
+			setCreatedDate(Calendar.getInstance());
+			setModifiedDate(Calendar.getInstance());
+		}
+	/**
+	 * 
+	 * @Description: 	当更新记录
+	 * @throws
+	 * @author chixue
+	 * @date 2016年5月9日
+	 */
+		@PreUpdate
+		public void  updateAuditInfo() {
+			setModifiedDate(Calendar.getInstance());
+		}
 
 }

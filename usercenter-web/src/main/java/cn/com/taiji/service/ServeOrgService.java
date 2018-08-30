@@ -25,6 +25,7 @@ import cn.com.taiji.entity.Certification;
 import cn.com.taiji.entity.CertificationDto;
 import cn.com.taiji.entity.Code;
 import cn.com.taiji.entity.CodeDto;
+import cn.com.taiji.entity.DeptObject;
 import cn.com.taiji.entity.DeptObjectUser;
 import cn.com.taiji.entity.EnterpriseFromServerDto;
 import cn.com.taiji.entity.EnterpriseInfo;
@@ -34,12 +35,14 @@ import cn.com.taiji.entity.HonorCertificateDto;
 import cn.com.taiji.entity.ServerOrg;
 import cn.com.taiji.repository.CertificationRepository;
 import cn.com.taiji.repository.CodeRepository;
+import cn.com.taiji.repository.DeptObjectRepository;
 import cn.com.taiji.repository.DeptObjectUserRepository;
 import cn.com.taiji.repository.EnterpriseInfoRepository;
 import cn.com.taiji.repository.HonorCertificateRepository;
 import cn.com.taiji.repository.ServerOrgRepository;
 import cn.com.taiji.util.BeanToMapUtil;
 import cn.com.taiji.util.DateUtil;
+import cn.com.taiji.util.OrgCodeUtil;
 import cn.com.taiji.util.PageUtil;
 
 @Service
@@ -65,6 +68,9 @@ public class ServeOrgService {
 	
 	@Autowired
 	private DeptObjectUserRepository deptObjectUserRepository;
+	
+	@Autowired
+	private DeptObjectRepository deptObjectRepository;
 	
 	
 	public List<DeptObjectUser> findByUserId(String userId){
@@ -185,6 +191,49 @@ public class ServeOrgService {
 	// 保存实体
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ServerOrg save(ServerOrg dept) {
+		
+		//保存公共表中的DeptObjectId
+		DeptObject deptObject = new DeptObject();
+//		DeptObject parent = this.deptObjectRepository.findOne("3");// 获取上级机构
+//		deptObject.setName(dept.getEnterpriseName());
+//		deptObject.setParent(parent);
+//		deptObject.setOrgCode(OrgCodeUtil.getGuid());
+		if (dept.getDeptObjectId() != null && dept.getDeptObjectId().trim().length() > 0) {
+			//deptObject = this.deptObjectRepository.findOne(dto.getDeptObjectId());
+			deptObject = this.deptObjectRepository.findOne(dept.getId());
+
+		}
+		
+		if (dept.getServerOrgTid() != null && !"".equals(dept.getServerOrgTid())) {
+			DeptObject parent = this.deptObjectRepository.findOne(dept.getServerOrgTid());// 获取上级机构
+			deptObject.setId(dept.getId());
+			deptObject.setName(dept.getEnterpriseName());
+			deptObject.setParent(parent);
+			deptObject.setOrgCode(OrgCodeUtil.getGuid());
+		} else {
+			DeptObject parent = this.deptObjectRepository.findOne("3");// 获取上级机构
+			deptObject.setId(dept.getId());
+			deptObject.setName(dept.getEnterpriseName());
+			deptObject.setParent(parent);
+			deptObject.setOrgCode(OrgCodeUtil.getGuid());
+		}
+		if(null == dept.getDeptObjectId() || "".equals(dept.getDeptObjectId())){
+			DeptObject deptObj = this.deptObjectRepository.saveAndFlush(deptObject);
+			dept.setDeptObjectId(deptObj.getId());
+		}
+		
+		if (dept.getDeptObjectId() == null || dept.getDeptObjectId().trim().length() == 0) {
+			dept.setDeptObjectId(dept.getId());// 获取公共表ID关联
+			dept.setAuditStatus("0");
+		}
+		// 绑定树和列表
+		if (dept.getServerOrgTid() == null || dept.getServerOrgTid().trim().length() == 0) {
+			dept.setServerOrgTid("3");// 获取公共表ID关联--点击树的时候升级服务机构关系
+		}
+		
+		
+		
+		
 		return serverOrgRepository.save(dept);
 	}
 

@@ -157,7 +157,7 @@ public class EnterpriseInfoNewDto extends QueryBase implements Serializable {
 	private String isCurrent;
 	
 	private Integer delFlag=1;
-	private Integer flag;
+	private Integer flag=1;
 	public EnterpriseInfoNewDto() {
 		super();
 	}
